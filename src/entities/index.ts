@@ -1,0 +1,12 @@
+export { Academy } from './academy.entity.js';
+export { User, UserRole } from './user.entity.js';
+export { AcademicYear } from './academic-year.entity.js';
+export { Student, Gender } from './student.entity.js';
+export { StudentInscription, InscriptionStatus } from './student-inscription.entity.js';
+export { Class } from './class.entity.js';
+export { ClassYear } from './class-year.entity.js';
+export { Course } from './course.entity.js';
+export { CourseClass } from './course-class.entity.js';
+export { Trimester } from './trimester.entity.js';
+export { Test, TestType } from './test.entity.js';
+export { Note } from './note.entity.js';
