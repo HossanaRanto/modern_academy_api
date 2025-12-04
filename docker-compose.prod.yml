@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  # NestJS API - Production
+  modern_academy_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: modern_academy_api
+    restart: always
+    ports:
+      - '${PORT:-3000}:3000'
+    environment:
+      NODE_ENV: production
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_TYPE: ${DB_TYPE}
+      PORT: 3000
+    networks:
+      - modern_academy_network
+    healthcheck:
+      test: ['CMD', 'wget', '--quiet', '--tries=1', '--spider', 'http://localhost:3000/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+
+networks:
+  modern_academy_network:
+    driver: bridge

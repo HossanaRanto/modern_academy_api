@@ -1,0 +1,23 @@
+# Docker ignore file
+node_modules
+npm-debug.log
+dist
+.git
+.gitignore
+.env
+.env.local
+.env.*.local
+README.md
+.vscode
+.idea
+coverage
+.nyc_output
+*.log
+.DS_Store
+test
+*.md
+!TYPEORM_MIGRATIONS.md
+.eslintrc.js
+.prettierrc
+docker-compose*.yml
+Dockerfile*
