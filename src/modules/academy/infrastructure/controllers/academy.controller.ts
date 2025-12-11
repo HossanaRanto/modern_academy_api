@@ -72,47 +72,7 @@ export class AcademyController {
     return this.createAcademyUseCase.execute(request, user.userId);
   }
 
-  @Get(':id')
-  @ApiOperation({ 
-    summary: 'Get academy by ID',
-    description: 'Retrieve detailed information about a specific academy',
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'Academy UUID',
-    example: '660e8400-e29b-41d4-a716-446655440000',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Academy found',
-    schema: {
-      example: {
-        id: '660e8400-e29b-41d4-a716-446655440000',
-        name: 'Modern Academy',
-        code: 'MA001',
-        address: '123 Main Street, City',
-        phone: '+1234567890',
-        email: 'info@modernacademy.com',
-        logo: null,
-        isActive: true,
-        createdAt: '2025-12-11T10:00:00.000Z',
-        updatedAt: '2025-12-11T10:00:00.000Z',
-      },
-    },
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized - Invalid or missing JWT token',
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Academy not found',
-  })
-  async getAcademy(@Param('id') id: string) {
-    return this.getAcademyUseCase.execute(id);
-  }
-
-  // Academic Year Management
+  // Academic Year Management - These routes MUST come before the :id route
 
   @Post('academic-years')
   @UseGuards(TenantGuard)
@@ -194,6 +154,8 @@ export class AcademyController {
     description: 'Forbidden - User not associated with an academy',
   })
   async getAcademicYears(@TenantId() tenantId: string) {
+    console.log("tenant ",tenantId);
+    
     return this.getAcademicYearsUseCase.execute(tenantId);
   }
 
@@ -266,5 +228,47 @@ export class AcademyController {
     @TenantId() tenantId: string,
   ) {
     return this.setCurrentAcademicYearUseCase.execute(tenantId, yearId);
+  }
+
+  // This parameterized route MUST come LAST to avoid conflicts
+
+  @Get(':id')
+  @ApiOperation({ 
+    summary: 'Get academy by ID',
+    description: 'Retrieve detailed information about a specific academy',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Academy UUID',
+    example: '660e8400-e29b-41d4-a716-446655440000',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Academy found',
+    schema: {
+      example: {
+        id: '660e8400-e29b-41d4-a716-446655440000',
+        name: 'Modern Academy',
+        code: 'MA001',
+        address: '123 Main Street, City',
+        phone: '+1234567890',
+        email: 'info@modernacademy.com',
+        logo: null,
+        isActive: true,
+        createdAt: '2025-12-11T10:00:00.000Z',
+        updatedAt: '2025-12-11T10:00:00.000Z',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized - Invalid or missing JWT token',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Academy not found',
+  })
+  async getAcademy(@Param('id') id: string) {
+    return this.getAcademyUseCase.execute(id);
   }
 }

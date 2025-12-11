@@ -51,6 +51,8 @@ export class AcademicYearRepositoryAdapter implements IAcademicYearRepository {
   }
 
   async findByAcademyId(academyId: string): Promise<AcademicYear[]> {
+    console.log("test ",academyId);
+    
     const cacheKey = `academic-years:academy:${academyId}`;
     
     // Try cache first
@@ -60,7 +62,9 @@ export class AcademicYearRepositoryAdapter implements IAcademicYearRepository {
     }
     
     const academicYears = await this.academicYearRepository.find({
-      where: { academyId },
+      where: {
+        academyId: academyId
+       },
       order: { startDate: 'DESC' },
     });
     
