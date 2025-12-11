@@ -21,20 +21,23 @@ async function bootstrap() {
   // Swagger Configuration
   const config = new DocumentBuilder()
     .setTitle('Modern Academy API')
-    .setDescription('API for managing educational academy - Authentication, Academies, Students, Courses, and more')
+    .setDescription(`
+      ## Multi-Tenant SaaS API for Educational Academy Management
+    `)
     .setVersion('1.0')
-    .addTag('Authentication', 'User authentication endpoints')
-    .addTag('Academies', 'Academy management endpoints')
+    .addTag('Authentication', 'User authentication endpoints (Public)')
+    .addTag('Academies', 'Academy management endpoints (Authenticated)')
+    .addTag('Students (Tenant-Specific)', '🔒 Student management - Requires academy membership')
     .addBearerAuth(
       {
         type: 'http',
         scheme: 'bearer',
         bearerFormat: 'JWT',
         name: 'JWT',
-        description: 'Enter JWT token',
+        description: 'Enter JWT token from sign-in response',
         in: 'header',
       },
-      'JWT-auth', // This name here is important for matching up with @ApiBearerAuth() in your controllers
+      'JWT-auth',
     )
     .build();
 

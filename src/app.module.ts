@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { AcademyModule } from './modules/academy/academy.module';
+import { StudentsModule } from './modules/students/students.module';
+import { TenantInterceptor } from './shared/interceptors/tenant.interceptor';
 
 @Module({
   imports: [
@@ -22,8 +25,15 @@ import { AcademyModule } from './modules/academy/academy.module';
     }),
     AuthModule,
     AcademyModule,
+    StudentsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TenantInterceptor,
+    },
+  ],
 })
 export class AppModule {}
