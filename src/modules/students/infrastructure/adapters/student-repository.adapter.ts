@@ -1,6 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import type * as CacheManagerTypes from 'cache-manager';
 import { Student } from '../../../../entities/student.entity';
 import { IStudentRepository } from '../../application/ports/student-repository.port';
 
@@ -9,9 +11,19 @@ export class StudentRepositoryAdapter implements IStudentRepository {
   constructor(
     @InjectRepository(Student)
     private readonly studentRepository: Repository<Student>,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: CacheManagerTypes.Cache,
   ) {}
 
   async findById(id: string, tenantId: string): Promise<Student | null> {
+    const cacheKey = `student:id:${id}:tenant:${tenantId}`;
+    
+    // Try cache first
+    const cached = await this.cacheManager.get<Student>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+    
     // Find student with inscriptions that belong to the academy
     const student = await this.studentRepository
       .createQueryBuilder('student')
@@ -21,10 +33,23 @@ export class StudentRepositoryAdapter implements IStudentRepository {
       .andWhere('academicYear.academyId = :tenantId', { tenantId })
       .getOne();
 
+    // Cache if found
+    if (student) {
+      await this.cacheManager.set(cacheKey, student);
+    }
+
     return student;
   }
 
   async findAll(tenantId: string): Promise<Student[]> {
+    const cacheKey = `students:tenant:${tenantId}`;
+    
+    // Try cache first
+    const cached = await this.cacheManager.get<Student[]>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+    
     // Find all students who have inscriptions in this academy
     const students = await this.studentRepository
       .createQueryBuilder('student')
@@ -34,6 +59,9 @@ export class StudentRepositoryAdapter implements IStudentRepository {
       .orderBy('student.createdAt', 'DESC')
       .getMany();
 
+    // Cache the list
+    await this.cacheManager.set(cacheKey, students);
+
     return students;
   }
 
@@ -41,6 +69,9 @@ export class StudentRepositoryAdapter implements IStudentRepository {
     // Create student without academyId since it's linked through inscription
     const student = this.studentRepository.create(studentData);
     const saved = await this.studentRepository.save(student);
+    
+    // Invalidate list cache
+    await this.cacheManager.del(`students:tenant:${tenantId}`);
     
     // Note: After creating a student, you'll need to create a StudentInscription
     // to link them to an AcademicYear (and thus to the Academy)
@@ -59,7 +90,13 @@ export class StudentRepositoryAdapter implements IStudentRepository {
     }
 
     Object.assign(student, studentData);
-    return this.studentRepository.save(student);
+    const updated = await this.studentRepository.save(student);
+    
+    // Invalidate caches
+    await this.cacheManager.del(`student:id:${id}:tenant:${tenantId}`);
+    await this.cacheManager.del(`students:tenant:${tenantId}`);
+    
+    return updated;
   }
 
   async delete(id: string, tenantId: string): Promise<void> {
@@ -70,5 +107,9 @@ export class StudentRepositoryAdapter implements IStudentRepository {
     }
 
     await this.studentRepository.remove(student);
+    
+    // Invalidate caches
+    await this.cacheManager.del(`student:id:${id}:tenant:${tenantId}`);
+    await this.cacheManager.del(`students:tenant:${tenantId}`);
   }
 }

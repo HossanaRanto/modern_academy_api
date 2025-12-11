@@ -1,12 +1,14 @@
 import { Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CacheModule } from '@nestjs/cache-manager';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { AcademyModule } from './modules/academy/academy.module';
 import { StudentsModule } from './modules/students/students.module';
 import { TenantInterceptor } from './shared/interceptors/tenant.interceptor';
+import { CacheConfigService } from './config/cache.config';
 
 @Module({
   imports: [
@@ -22,6 +24,10 @@ import { TenantInterceptor } from './shared/interceptors/tenant.interceptor';
       synchronize: false, // Always false in production - use migrations instead
       autoLoadEntities: true,
       logging: process.env.NODE_ENV === 'development',
+    }),
+    CacheModule.registerAsync({
+      isGlobal: true,
+      useClass: CacheConfigService,
     }),
     AuthModule,
     AcademyModule,

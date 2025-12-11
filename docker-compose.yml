@@ -21,6 +21,24 @@ services:
       timeout: 5s
       retries: 5
 
+  # Redis Cache for Development
+  modern_academy_redis:
+    image: redis:7-alpine
+    container_name: modern_academy_redis
+    restart: unless-stopped
+    ports:
+      - '${REDIS_PORT:-6379}:6379'
+    volumes:
+      - redis_data:/data
+    networks:
+      - modern_academy_network
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: redis-server --appendonly yes
+
   # NestJS API - Development
   modern_academy_api:
     build:
@@ -40,12 +58,17 @@ services:
       DB_DATABASE: ${DB_DATABASE:-modern_academy}
       JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-in-production}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-24h}
+      REDIS_HOST: modern_academy_redis
+      REDIS_PORT: 6379
+      REDIS_TTL: ${REDIS_TTL:-300}
       PORT: 3000
     volumes:
       - .:/app
       - /app/node_modules
     depends_on:
       modern_academy_db:
+        condition: service_healthy
+      modern_academy_redis:
         condition: service_healthy
     networks:
       - modern_academy_network
@@ -77,4 +100,6 @@ volumes:
   postgres_data:
     driver: local
   pgadmin_data:
+    driver: local
+  redis_data:
     driver: local
