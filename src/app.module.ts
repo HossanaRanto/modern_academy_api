@@ -8,11 +8,11 @@ import { AcademyModule } from './modules/academy/academy.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: (process.env.DB_TYPE as any) || 'mysql',
+      type: (process.env.DB_TYPE as 'postgres' | 'mysql') || 'postgres',
       host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT || '3306'),
-      username: process.env.DB_USERNAME || 'root',
-      password: process.env.DB_PASSWORD || '',
+      port: parseInt(process.env.DB_PORT || '5432'),
+      username: process.env.DB_USERNAME || 'postgres',
+      password: process.env.DB_PASSWORD || 'postgres',
       database: process.env.DB_DATABASE || 'modern_academy',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
