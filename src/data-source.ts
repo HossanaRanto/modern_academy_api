@@ -4,12 +4,12 @@ import { config } from 'dotenv';
 // Load environment variables
 config();
 
-// Determine database type based on port (5432 = PostgreSQL, 3306 = MySQL)
-const dbPort = parseInt(process.env.DB_PORT || '3306');
-const dbType = dbPort === 5432 ? 'postgres' : 'mysql';
+// Get database type from environment variable
+const dbType = (process.env.DB_TYPE as 'postgres' | 'mysql') || 'postgres';
+const dbPort = parseInt(process.env.DB_PORT || '5432');
 
 const dataSourceConfig: DataSourceOptions = {
-  type: dbType as 'postgres' | 'mysql',
+  type: dbType,
   host: process.env.DB_HOST || 'localhost',
   port: dbPort,
   username: process.env.DB_USERNAME || (dbType === 'postgres' ? 'postgres' : 'root'),
