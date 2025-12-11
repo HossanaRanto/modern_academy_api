@@ -49,10 +49,10 @@ export class User {
   @Column({ type: 'boolean', default: true })
   isActive: boolean;
 
-  @Column({ type: 'uuid' })
+  @Column({ type: 'uuid', nullable: true })
   academyId: string;
 
-  @ManyToOne(() => Academy, (academy) => academy.users)
+  @ManyToOne(() => Academy, (academy) => academy.users, { nullable: true })
   @JoinColumn({ name: 'academyId' })
   academy: Academy;
 

@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './modules/auth/auth.module';
+import { AcademyModule } from './modules/academy/academy.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { AppService } from './app.service';
       autoLoadEntities: true,
       logging: process.env.NODE_ENV === 'development',
     }),
+    AuthModule,
+    AcademyModule,
   ],
   controllers: [AppController],
   providers: [AppService],
