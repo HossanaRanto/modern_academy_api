@@ -7,6 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { CourseClass } from './course-class.entity.js';
+import { Note } from './index.js';
 
 @Entity('courses')
 export class Course {
@@ -33,6 +34,9 @@ export class Course {
 
   @OneToMany(() => CourseClass, (courseClass) => courseClass.course)
   courseClasses: CourseClass[];
+
+  @OneToMany(() => Note, (note) => note.course)
+  notes: Note[];
 
   @CreateDateColumn()
   createdAt: Date;

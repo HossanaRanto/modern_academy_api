@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Student } from './student.entity.js';
 import { Test } from './test.entity.js';
+import { Course } from './course.entity.js';
 
 @Entity('notes')
 @Index(['studentId', 'testId'], { unique: true })
@@ -22,6 +23,9 @@ export class Note {
 
   @Column({ type: 'uuid' })
   testId: string;
+
+  @Column({ type: 'uuid'})
+  courseId: string;
 
   @Column({ type: 'decimal', precision: 5, scale: 2 })
   score: number;
@@ -48,6 +52,10 @@ export class Note {
   @ManyToOne(() => Test, (test) => test.notes)
   @JoinColumn({ name: 'testId' })
   test: Test;
+
+  @ManyToOne(() => Course, (course) => course.notes)
+  @JoinColumn({ name: 'courseId' })
+  course: Course;
 
   @CreateDateColumn()
   createdAt: Date;

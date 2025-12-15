@@ -49,7 +49,35 @@ export class NoteRepositoryAdapter implements INoteRepository {
   ): Promise<Note | null> {
     return this.noteRepository.findOne({
       where: { studentId, testId },
-      relations: ['student', 'test'],
+      relations: ['student', 'test', 'course'],
+    });
+  }
+
+  async findByStudentAndCourse(
+    studentId: string,
+    courseId: string,
+  ): Promise<Note[]> {
+    return this.noteRepository.find({
+      where: { studentId, courseId },
+      relations: ['test', 'test.trimester', 'course'],
+      order: {
+        test: {
+          date: 'ASC',
+        },
+      },
+    });
+  }
+
+  async findByTestAndCourse(testId: string, courseId: string): Promise<Note[]> {
+    return this.noteRepository.find({
+      where: { testId, courseId },
+      relations: ['student', 'test', 'course'],
+      order: {
+        student: {
+          lastName: 'ASC',
+          firstName: 'ASC',
+        },
+      },
     });
   }
 
@@ -69,5 +97,19 @@ export class NoteRepositoryAdapter implements INoteRepository {
   async bulkCreate(notesData: Partial<Note>[]): Promise<Note[]> {
     const notes = this.noteRepository.create(notesData);
     return this.noteRepository.save(notes);
+  }
+
+  async bulkUpsert(notesData: Partial<Note>[]): Promise<Note[]> {
+    const result = await this.noteRepository.upsert(notesData, {
+      conflictPaths: ['studentId', 'testId'],
+      skipUpdateIfNoValuesChanged: true,
+    });
+
+    // Fetch the upserted records with relations
+    const ids = result.identifiers.map((identifier) => identifier.id);
+    return this.noteRepository.find({
+      where: ids.map((id) => ({ id })),
+      relations: ['student', 'test', 'course'],
+    });
   }
 }
