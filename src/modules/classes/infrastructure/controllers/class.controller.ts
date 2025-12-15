@@ -314,9 +314,8 @@ export class ClassController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async seedDefaultClasses(
-    @TenantId() academyId: string,
     @CurrentAcademicYear() academicYearId: string,
   ) {
-    return this.seedDefaultClassesUseCase.execute(academyId, academicYearId);
+    return this.seedDefaultClassesUseCase.execute(academicYearId);
   }
 }

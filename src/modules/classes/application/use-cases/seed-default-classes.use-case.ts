@@ -23,7 +23,7 @@ export class SeedDefaultClassesUseCase {
     private readonly classYearRepository: ClassYearPort.IClassYearRepository,
   ) {}
 
-  async execute(academyId: string, academicYearId: string): Promise<{ created: ClassResponse[]; skipped: string[] }> {
+  async execute(academicYearId: string): Promise<{ created: ClassResponse[]; skipped: string[] }> {
     let defaultClasses: DefaultClassData[];
     try {
       // Use require which works with both src and dist folders
