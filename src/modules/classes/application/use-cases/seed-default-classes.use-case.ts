@@ -1,8 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import * as ClassPort from '../ports/class-repository.port';
 import { ClassResponse } from '../../domain/class.interface';
-import * as fs from 'fs';
-import * as path from 'path';
 
 interface DefaultClassData {
   name: string;
@@ -23,14 +21,12 @@ export class SeedDefaultClassesUseCase {
   ) {}
 
   async execute(academyId: string): Promise<{ created: ClassResponse[]; skipped: string[] }> {
-    const defaultClassesPath = path.join(__dirname, '../../infrastructure/data/default-classes.json');
-    
     let defaultClasses: DefaultClassData[];
     try {
-      const fileContent = fs.readFileSync(defaultClassesPath, 'utf-8');
-      defaultClasses = JSON.parse(fileContent);
+      // Use require which works with both src and dist folders
+      defaultClasses = require('../../infrastructure/data/default-classes.json');
     } catch (error) {
-      this.logger.error('Failed to read default classes file', error);
+      this.logger.error('Failed to load default classes data', error);
       throw new Error('Failed to load default classes data');
     }
 

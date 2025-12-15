@@ -4,8 +4,6 @@ import * as CourseClassPort from '../ports/course-class-repository.port';
 import * as ClassPort from '../../../classes/application/ports/class-repository.port';
 import * as ClassYearPort from '../../../classes/application/ports/class-year-repository.port';
 import { CourseResponse, CourseClassResponse } from '../../domain/course.interface';
-import * as fs from 'fs';
-import * as path from 'path';
 
 interface DefaultCourseData {
   name: string;
@@ -47,14 +45,12 @@ export class SeedDefaultCoursesUseCase {
   ) {}
 
   async execute(academyId: string, academicYearId: string): Promise<SeedResult> {
-    const defaultCoursesPath = path.join(__dirname, '../../infrastructure/data/default-courses.json');
-    
     let defaultCoursesMap: DefaultCoursesMap;
     try {
-      const fileContent = fs.readFileSync(defaultCoursesPath, 'utf-8');
-      defaultCoursesMap = JSON.parse(fileContent);
+      // Use require which works with both src and dist folders
+      defaultCoursesMap = require('../../infrastructure/data/default-courses.json');
     } catch (error) {
-      this.logger.error('Failed to read default courses file', error);
+      this.logger.error('Failed to load default courses data', error);
       throw new Error('Failed to load default courses data');
     }
 
