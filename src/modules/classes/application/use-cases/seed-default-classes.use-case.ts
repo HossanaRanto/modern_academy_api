@@ -47,6 +47,8 @@ export class SeedDefaultClassesUseCase {
         classMap.set(classData.code, existingClass);
         
         // Create class year if it doesn't exist for this academic year
+        console.log("academic year", academicYearId);
+        
         const existingClassYear = await this.classYearRepository.findByClassAndAcademicYear(
           existingClass.id,
           academicYearId,

@@ -29,6 +29,12 @@ export class AcademicYearGuard implements CanActivate {
     const user = request.user;
     const academicYearId = request.headers['x-academic-year-id'];
 
+    // If user is not authenticated yet, skip this guard
+    // (JwtAuthGuard will handle authentication)
+    if (!user) {
+      return true;
+    }
+
     // If required but header not provided, throw BadRequest immediately
     if (isRequired && !academicYearId) {
       throw new BadRequestException(
@@ -43,7 +49,13 @@ export class AcademicYearGuard implements CanActivate {
 
     // If header provided, validate it
     if (academicYearId) {
-      if (!user || !user.academyId) {
+      // Validate UUID format
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if (!uuidRegex.test(academicYearId)) {
+        throw new BadRequestException('Invalid academic year ID format. Must be a valid UUID.');
+      }
+
+      if (!user.academyId) {
         throw new ForbiddenException('User must belong to an academy');
       }
 
