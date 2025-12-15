@@ -7,6 +7,8 @@ import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { AcademyModule } from './modules/academy/academy.module';
 import { StudentsModule } from './modules/students/students.module';
+import { ClassesModule } from './modules/classes/classes.module';
+import { CoursesModule } from './modules/courses/courses.module';
 import { TenantInterceptor } from './shared/interceptors/tenant.interceptor';
 import { CacheConfigService } from './config/cache.config';
 
@@ -32,6 +34,8 @@ import { CacheConfigService } from './config/cache.config';
     AuthModule,
     AcademyModule,
     StudentsModule,
+    ClassesModule,
+    CoursesModule,
   ],
   controllers: [AppController],
   providers: [
