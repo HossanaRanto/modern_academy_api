@@ -1,0 +1,121 @@
+/* Inscription Form Specific Styles */
+
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px 20px;
+  border-radius: 0;
+  border: none;
+}
+
+.header h1 {
+  color: white;
+  font-size: 28pt;
+  margin-bottom: 5px;
+}
+
+.header p {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 11pt;
+  margin: 3px 0;
+}
+
+.logo {
+  filter: brightness(0) invert(1);
+}
+
+h2 {
+  color: #667eea;
+  border-bottom: 3px solid #667eea;
+  padding-bottom: 10px;
+  display: inline-block;
+  width: 100%;
+}
+
+.section {
+  background-color: #fafafa;
+  padding: 20px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  border-left: 4px solid #667eea;
+}
+
+.section-title {
+  color: #667eea;
+  font-size: 16pt;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+}
+
+.field {
+  margin-bottom: 12px;
+}
+
+.field-label {
+  font-weight: bold;
+  color: #555;
+  font-size: 11pt;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.field-value {
+  display: block;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: white;
+  min-height: 35px;
+  border-radius: 3px;
+  font-size: 11pt;
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 11pt;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.signature-section {
+  margin-top: 60px;
+  padding-top: 20px;
+  border-top: 2px solid #ddd;
+}
+
+.signature-box {
+  width: 45%;
+}
+
+.signature-line {
+  border-top: 2px solid #333;
+  margin-top: 70px;
+  padding-top: 8px;
+  font-size: 11pt;
+  font-weight: bold;
+  color: #555;
+}
+
+.footer {
+  background-color: #f5f5f5;
+  border-top: 2px solid #667eea;
+  padding: 15px 0;
+  margin-top: 30px;
+}
+
+.footer p {
+  margin: 3px 0;
+  color: #666;
+}
+
+/* Print optimization */
+@media print {
+  .section {
+    break-inside: avoid;
+  }
+  
+  .signature-section {
+    break-inside: avoid;
+  }
+}

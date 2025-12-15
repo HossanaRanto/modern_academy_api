@@ -9,7 +9,9 @@ import {
   HttpCode, 
   HttpStatus,
   UseInterceptors,
+  Res,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import { 
   ApiTags, 
   ApiOperation, 
@@ -26,6 +28,7 @@ import { UpdateStudentUseCase } from '../../application/use-cases/update-student
 import { GetInscriptionsByAcademicYearUseCase } from '../../application/use-cases/get-inscriptions-by-academic-year.use-case';
 import { GetInscriptionsByClassYearUseCase } from '../../application/use-cases/get-inscriptions-by-class-year.use-case';
 import { UpdateInscriptionUseCase } from '../../application/use-cases/update-inscription.use-case';
+import { GenerateInscriptionPdfUseCase } from '../../application/use-cases/generate-inscription-pdf.use-case';
 import { RegisterStudentDto } from '../dtos/register-student.dto';
 import { UpdateStudentDto } from '../dtos/update-student.dto';
 import { UpdateInscriptionDto } from '../dtos/update-inscription.dto';
@@ -51,6 +54,7 @@ export class StudentController {
     private readonly getInscriptionsByAcademicYearUseCase: GetInscriptionsByAcademicYearUseCase,
     private readonly getInscriptionsByClassYearUseCase: GetInscriptionsByClassYearUseCase,
     private readonly updateInscriptionUseCase: UpdateInscriptionUseCase,
+    private readonly generateInscriptionPdfUseCase: GenerateInscriptionPdfUseCase,
   ) {}
 
   @Post('register')
@@ -216,5 +220,48 @@ export class StudentController {
     @Body() request: UpdateInscriptionDto,
   ) {
     return this.updateInscriptionUseCase.execute(id, request);
+  }
+
+  @Get('inscriptions/:id/pdf')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ 
+    summary: 'Generate inscription form PDF',
+    description: 'Generate a PDF document for a student inscription form'
+  })
+  @ApiParam({ name: 'id', description: 'Inscription ID' })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'PDF generated successfully',
+    content: {
+      'application/pdf': {
+        schema: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Inscription not found' })
+  async generateInscriptionPdf(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ) {
+    // TODO: Get academy info from current user/tenant context
+    const pdfBuffer = await this.generateInscriptionPdfUseCase.execute({
+      inscriptionId: id,
+      academyName: 'Modern Academy',
+      academyAddress: '123 Education Street, City, Country',
+      academyPhone: '+1 234 567 8900',
+      academyEmail: 'info@modernacademy.com',
+    });
+
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename=inscription-${id}.pdf`,
+      'Content-Length': pdfBuffer.length,
+    });
+
+    res.send(pdfBuffer);
   }
 }

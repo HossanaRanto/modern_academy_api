@@ -11,16 +11,19 @@ import { UpdateStudentUseCase } from './application/use-cases/update-student.use
 import { GetInscriptionsByAcademicYearUseCase } from './application/use-cases/get-inscriptions-by-academic-year.use-case';
 import { GetInscriptionsByClassYearUseCase } from './application/use-cases/get-inscriptions-by-class-year.use-case';
 import { UpdateInscriptionUseCase } from './application/use-cases/update-inscription.use-case';
+import { GenerateInscriptionPdfUseCase } from './application/use-cases/generate-inscription-pdf.use-case';
 import { StudentRepositoryAdapter } from './infrastructure/adapters/student-repository.adapter';
 import { StudentInscriptionRepositoryAdapter } from './infrastructure/adapters/student-inscription-repository.adapter';
 import { STUDENT_REPOSITORY } from './application/ports/student-repository.port';
 import { STUDENT_INSCRIPTION_REPOSITORY } from './application/ports/student-inscription-repository.port';
 import { ClassesModule } from '../classes/classes.module';
+import { PdfModule } from '../../shared/pdf/pdf.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Student, StudentInscription, ClassYear]),
     ClassesModule, // Import to access ClassYear repository
+    PdfModule, // Import PDF generation module
   ],
   controllers: [StudentController],
   providers: [
@@ -32,6 +35,7 @@ import { ClassesModule } from '../classes/classes.module';
     GetInscriptionsByAcademicYearUseCase,
     GetInscriptionsByClassYearUseCase,
     UpdateInscriptionUseCase,
+    GenerateInscriptionPdfUseCase,
     // Repositories
     {
       provide: STUDENT_REPOSITORY,

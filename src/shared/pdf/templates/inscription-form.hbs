@@ -1,0 +1,202 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    {{#if academyLogo}}
+    <img src="{{academyLogo}}" alt="Academy Logo" class="logo">
+    {{/if}}
+    <h1>{{academyName}}</h1>
+    <p>{{academyAddress}}</p>
+    {{#if academyPhone}}
+    <p>Phone: {{academyPhone}} | Email: {{academyEmail}}</p>
+    {{/if}}
+  </div>
+
+  <!-- Document Title -->
+  <h2 class="text-center mb-20">STUDENT INSCRIPTION FORM</h2>
+
+  <!-- Academic Year and Class Information -->
+  <div class="section">
+    <div class="row">
+      <div class="col-half">
+        <div class="field">
+          <span class="field-label">Academic Year:</span>
+          <span class="field-value">{{academicYearName}}</span>
+        </div>
+      </div>
+      <div class="col-half">
+        <div class="field">
+          <span class="field-label">Class:</span>
+          <span class="field-value">{{className}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-half">
+        <div class="field">
+          <span class="field-label">Inscription Date:</span>
+          <span class="field-value">{{formatDate inscriptionDate}}</span>
+        </div>
+      </div>
+      <div class="col-half">
+        <div class="field">
+          <span class="field-label">Status:</span>
+          <span class="field-value">
+            <span class="badge badge-{{#eq status 'confirmed'}}success{{/eq}}{{#eq status 'pending'}}warning{{/eq}}{{#eq status 'cancelled'}}danger{{/eq}}">
+              {{uppercase status}}
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Student Information -->
+  <div class="section">
+    <h3 class="section-title">Student Information</h3>
+    
+    <div class="row">
+      <div class="col-half">
+        <div class="field">
+          <span class="field-label">First Name:</span>
+          <span class="field-value">{{student.firstName}}</span>
+        </div>
+      </div>
+      <div class="col-half">
+        <div class="field">
+          <span class="field-label">Last Name:</span>
+          <span class="field-value">{{student.lastName}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-half">
+        <div class="field">
+          <span class="field-label">Registration Number:</span>
+          <span class="field-value">{{student.registrationNumber}}</span>
+        </div>
+      </div>
+      <div class="col-half">
+        <div class="field">
+          <span class="field-label">Gender:</span>
+          <span class="field-value">{{uppercase student.gender}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-half">
+        <div class="field">
+          <span class="field-label">Date of Birth:</span>
+          <span class="field-value">{{formatDate student.dateOfBirth}}</span>
+        </div>
+      </div>
+      <div class="col-half">
+        <div class="field">
+          <span class="field-label">Place of Birth:</span>
+          <span class="field-value">{{student.placeOfBirth}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-full">
+        <div class="field">
+          <span class="field-label">Address:</span>
+          <span class="field-value">{{student.address}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-half">
+        <div class="field">
+          <span class="field-label">Phone:</span>
+          <span class="field-value">{{student.phone}}</span>
+        </div>
+      </div>
+      <div class="col-half">
+        <div class="field">
+          <span class="field-label">Email:</span>
+          <span class="field-value">{{student.email}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Parent/Guardian Information -->
+  <div class="section">
+    <h3 class="section-title">Parent/Guardian Information</h3>
+    
+    <div class="row">
+      <div class="col-full">
+        <div class="field">
+          <span class="field-label">Parent Name:</span>
+          <span class="field-value">{{student.parentName}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-half">
+        <div class="field">
+          <span class="field-label">Parent Phone:</span>
+          <span class="field-value">{{student.parentPhone}}</span>
+        </div>
+      </div>
+      <div class="col-half">
+        <div class="field">
+          <span class="field-label">Parent Email:</span>
+          <span class="field-value">{{student.parentEmail}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inscription Details -->
+  {{#if notes}}
+  <div class="section">
+    <h3 class="section-title">Additional Notes</h3>
+    <p>{{notes}}</p>
+  </div>
+  {{/if}}
+
+  <!-- Payment Information -->
+  <div class="section">
+    <h3 class="section-title">Payment Status</h3>
+    <div class="row">
+      <div class="col-half">
+        <div class="field">
+          <span class="field-label">Payment Status:</span>
+          <span class="field-value">
+            <span class="badge badge-{{#eq isPaid true}}success{{/eq}}{{#eq isPaid false}}warning{{/eq}}">
+              {{#eq isPaid true}}PAID{{/eq}}{{#eq isPaid false}}UNPAID{{/eq}}
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Signatures -->
+  <div class="signature-section">
+    <div class="signature-box">
+      <div class="signature-line">
+        Parent/Guardian Signature
+      </div>
+      <p style="font-size: 9pt; margin-top: 5px;">Date: _____________</p>
+    </div>
+    <div class="signature-box">
+      <div class="signature-line">
+        School Administrator Signature
+      </div>
+      <p style="font-size: 9pt; margin-top: 5px;">Date: _____________</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>Generated on {{formatDate generatedDate}} | {{academyName}} - Inscription Form</p>
+    <p style="font-size: 9pt;">This is an official document. Please keep it for your records.</p>
+  </div>
+</div>
