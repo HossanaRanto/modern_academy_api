@@ -12,6 +12,7 @@ import {
   HttpStatus,
   ParseBoolPipe,
   DefaultValuePipe,
+  UseInterceptors,
 } from '@nestjs/common';
 import { 
   ApiTags, 
@@ -41,6 +42,8 @@ import { TenantRequired } from '../../../../shared/decorators/tenant-required.de
 import { TenantId } from '../../../../shared/decorators/tenant-id.decorator';
 import { CurrentAcademicYear } from '../../../../shared/decorators/current-academic-year.decorator';
 import { RequireAcademicYear } from '../../../../shared/decorators/require-academic-year.decorator';
+import { CacheInterceptor } from '../../../../shared/interceptors/cache.interceptor';
+import { CacheKey, CacheTTL } from '../../../../shared/decorators/cache.decorator';
 
 @ApiTags('Classes')
 @ApiBearerAuth('JWT-auth')
@@ -94,6 +97,9 @@ export class ClassController {
   }
 
   @Get()
+  @UseInterceptors(CacheInterceptor)
+  @CacheKey('classes:all')
+  @CacheTTL(300) // Cache for 5 minutes
   @ApiOperation({ 
     summary: 'Get all classes',
     description: 'Retrieve all classes for the academy.',
@@ -133,6 +139,9 @@ export class ClassController {
   }
 
   @Get(':id')
+  @UseInterceptors(CacheInterceptor)
+  @CacheKey('classes:id::id')
+  @CacheTTL(600) // Cache for 10 minutes
   @ApiOperation({ 
     summary: 'Get class by ID',
     description: 'Retrieve a specific class by its ID.',
@@ -234,6 +243,9 @@ export class ClassController {
   }
 
   @Get('years/current')
+  @UseInterceptors(CacheInterceptor)
+  @CacheKey('classes:years:current')
+  @CacheTTL(300) // Cache for 5 minutes
   @RequireAcademicYear()
   @ApiOperation({ 
     summary: 'Get class years for current academic year',

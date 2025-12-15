@@ -5,6 +5,7 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import type * as CacheManagerTypes from 'cache-manager';
 import { CourseClass } from '../../../../entities/course-class.entity';
 import { ICourseClassRepository } from '../../application/ports/course-class-repository.port';
+import { CacheUtil } from '../../../../shared/utils/cache.util';
 
 @Injectable()
 export class CourseClassRepositoryAdapter implements ICourseClassRepository {
@@ -96,12 +97,13 @@ export class CourseClassRepositoryAdapter implements ICourseClassRepository {
     const courseClass = this.courseClassRepository.create(courseClassData);
     const saved = await this.courseClassRepository.save(courseClass);
     
+    // Cache the new entity
     await this.cacheManager.set(`course-class:id:${saved.id}`, saved);
     await this.cacheManager.set(`course-class:${saved.courseId}:${saved.classYearId}`, saved);
     
     // Invalidate list caches
-    await this.cacheManager.del(`course-class:class-year:${saved.classYearId}`);
-    await this.cacheManager.del(`course-class:course:${saved.courseId}`);
+    await CacheUtil.deletePattern(this.cacheManager, `course-class:class-year:${saved.classYearId}`);
+    await CacheUtil.deletePattern(this.cacheManager, `course-class:course:${saved.courseId}`);
     
     return saved;
   }
@@ -109,14 +111,15 @@ export class CourseClassRepositoryAdapter implements ICourseClassRepository {
   async save(courseClass: CourseClass): Promise<CourseClass> {
     const saved = await this.courseClassRepository.save(courseClass);
     
+    // Update cache
     await this.cacheManager.del(`course-class:id:${saved.id}`);
     await this.cacheManager.del(`course-class:${saved.courseId}:${saved.classYearId}`);
     await this.cacheManager.set(`course-class:id:${saved.id}`, saved);
     await this.cacheManager.set(`course-class:${saved.courseId}:${saved.classYearId}`, saved);
     
     // Invalidate list caches
-    await this.cacheManager.del(`course-class:class-year:${saved.classYearId}`);
-    await this.cacheManager.del(`course-class:course:${saved.courseId}`);
+    await CacheUtil.deletePattern(this.cacheManager, `course-class:class-year:${saved.classYearId}`);
+    await CacheUtil.deletePattern(this.cacheManager, `course-class:course:${saved.courseId}`);
     
     return saved;
   }
@@ -126,10 +129,13 @@ export class CourseClassRepositoryAdapter implements ICourseClassRepository {
     if (courseClass) {
       await this.courseClassRepository.delete(id);
       
+      // Delete entity caches
       await this.cacheManager.del(`course-class:id:${id}`);
       await this.cacheManager.del(`course-class:${courseClass.courseId}:${courseClass.classYearId}`);
-      await this.cacheManager.del(`course-class:class-year:${courseClass.classYearId}`);
-      await this.cacheManager.del(`course-class:course:${courseClass.courseId}`);
+      
+      // Invalidate list caches
+      await CacheUtil.deletePattern(this.cacheManager, `course-class:class-year:${courseClass.classYearId}`);
+      await CacheUtil.deletePattern(this.cacheManager, `course-class:course:${courseClass.courseId}`);
     }
   }
 }

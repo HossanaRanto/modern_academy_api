@@ -5,6 +5,7 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import type * as CacheManagerTypes from 'cache-manager';
 import { Class } from '../../../../entities/class.entity';
 import { IClassRepository } from '../../application/ports/class-repository.port';
+import { CacheUtil } from '../../../../shared/utils/cache.util';
 
 @Injectable()
 export class ClassRepositoryAdapter implements IClassRepository {
@@ -88,12 +89,13 @@ export class ClassRepositoryAdapter implements IClassRepository {
     const classEntity = this.classRepository.create(classData);
     const saved = await this.classRepository.save(classEntity);
     
+    // Cache the new entity
     await this.cacheManager.set(`class:id:${saved.id}`, saved);
     await this.cacheManager.set(`class:code:${saved.code}`, saved);
     
     // Invalidate list caches
-    await this.cacheManager.del('class:all:*');
-    await this.cacheManager.del('class:active:*');
+    await CacheUtil.deletePattern(this.cacheManager, 'class:all:*');
+    await CacheUtil.deletePattern(this.cacheManager, 'class:active:*');
     
     return saved;
   }
@@ -101,14 +103,20 @@ export class ClassRepositoryAdapter implements IClassRepository {
   async save(classEntity: Class): Promise<Class> {
     const saved = await this.classRepository.save(classEntity);
     
+    // Update cache
     await this.cacheManager.del(`class:id:${saved.id}`);
     await this.cacheManager.del(`class:code:${saved.code}`);
     await this.cacheManager.set(`class:id:${saved.id}`, saved);
     await this.cacheManager.set(`class:code:${saved.code}`, saved);
     
     // Invalidate list caches
-    await this.cacheManager.del('class:all:*');
-    await this.cacheManager.del('class:active:*');
+    await CacheUtil.deletePattern(this.cacheManager, 'class:all:*');
+    await CacheUtil.deletePattern(this.cacheManager, 'class:active:*');
+    
+    // If child class changed, invalidate child class cache
+    if (saved.childClassId) {
+      await this.cacheManager.del(`class:id:${saved.childClassId}`);
+    }
     
     return saved;
   }
@@ -118,10 +126,18 @@ export class ClassRepositoryAdapter implements IClassRepository {
     if (classEntity) {
       await this.classRepository.delete(id);
       
+      // Delete entity caches
       await this.cacheManager.del(`class:id:${id}`);
       await this.cacheManager.del(`class:code:${classEntity.code}`);
-      await this.cacheManager.del('class:all:*');
-      await this.cacheManager.del('class:active:*');
+      
+      // Invalidate list caches
+      await CacheUtil.deletePattern(this.cacheManager, 'class:all:*');
+      await CacheUtil.deletePattern(this.cacheManager, 'class:active:*');
+      
+      // If this class was a child of another, invalidate parent cache
+      if (classEntity.childClassId) {
+        await this.cacheManager.del(`class:id:${classEntity.childClassId}`);
+      }
     }
   }
 }

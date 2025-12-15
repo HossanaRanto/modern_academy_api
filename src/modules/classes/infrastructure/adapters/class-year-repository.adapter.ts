@@ -5,6 +5,7 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import type * as CacheManagerTypes from 'cache-manager';
 import { ClassYear } from '../../../../entities/class-year.entity';
 import { IClassYearRepository } from '../../application/ports/class-year-repository.port';
+import { CacheUtil } from '../../../../shared/utils/cache.util';
 
 @Injectable()
 export class ClassYearRepositoryAdapter implements IClassYearRepository {
@@ -97,12 +98,13 @@ export class ClassYearRepositoryAdapter implements IClassYearRepository {
     const classYear = this.classYearRepository.create(classYearData);
     const saved = await this.classYearRepository.save(classYear);
     
+    // Cache the new entity
     await this.cacheManager.set(`class-year:id:${saved.id}`, saved);
     await this.cacheManager.set(`class-year:${saved.classId}:${saved.academicYearId}`, saved);
     
     // Invalidate list caches
-    await this.cacheManager.del(`class-year:academic-year:${saved.academicYearId}`);
-    await this.cacheManager.del(`class-year:class:${saved.classId}`);
+    await CacheUtil.deletePattern(this.cacheManager, `class-year:academic-year:${saved.academicYearId}`);
+    await CacheUtil.deletePattern(this.cacheManager, `class-year:class:${saved.classId}`);
     
     return saved;
   }
@@ -110,14 +112,15 @@ export class ClassYearRepositoryAdapter implements IClassYearRepository {
   async save(classYear: ClassYear): Promise<ClassYear> {
     const saved = await this.classYearRepository.save(classYear);
     
+    // Update cache
     await this.cacheManager.del(`class-year:id:${saved.id}`);
     await this.cacheManager.del(`class-year:${saved.classId}:${saved.academicYearId}`);
     await this.cacheManager.set(`class-year:id:${saved.id}`, saved);
     await this.cacheManager.set(`class-year:${saved.classId}:${saved.academicYearId}`, saved);
     
     // Invalidate list caches
-    await this.cacheManager.del(`class-year:academic-year:${saved.academicYearId}`);
-    await this.cacheManager.del(`class-year:class:${saved.classId}`);
+    await CacheUtil.deletePattern(this.cacheManager, `class-year:academic-year:${saved.academicYearId}`);
+    await CacheUtil.deletePattern(this.cacheManager, `class-year:class:${saved.classId}`);
     
     return saved;
   }
@@ -127,10 +130,13 @@ export class ClassYearRepositoryAdapter implements IClassYearRepository {
     if (classYear) {
       await this.classYearRepository.delete(id);
       
+      // Delete entity caches
       await this.cacheManager.del(`class-year:id:${id}`);
       await this.cacheManager.del(`class-year:${classYear.classId}:${classYear.academicYearId}`);
-      await this.cacheManager.del(`class-year:academic-year:${classYear.academicYearId}`);
-      await this.cacheManager.del(`class-year:class:${classYear.classId}`);
+      
+      // Invalidate list caches
+      await CacheUtil.deletePattern(this.cacheManager, `class-year:academic-year:${classYear.academicYearId}`);
+      await CacheUtil.deletePattern(this.cacheManager, `class-year:class:${classYear.classId}`);
     }
   }
 }
