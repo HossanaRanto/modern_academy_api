@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Trimester } from '../../entities/trimester.entity';
 import { Test } from '../../entities/test.entity';
 import { Note } from '../../entities/note.entity';
+import { AcademicYear } from '../../entities/academic-year.entity';
 import { TrimesterController } from './infrastructure/controllers/trimester.controller';
 import { TestController } from './infrastructure/controllers/test.controller';
 import { CreateTrimesterUseCase } from './application/use-cases/create-trimester.use-case';
@@ -24,7 +25,7 @@ import { TEST_REPOSITORY } from './application/ports/test-repository.port';
 import { NOTE_REPOSITORY } from './application/ports/note-repository.port';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Trimester, Test, Note])],
+  imports: [TypeOrmModule.forFeature([Trimester, Test, Note, AcademicYear])],
   controllers: [TrimesterController, TestController],
   providers: [
     // Trimester use cases
