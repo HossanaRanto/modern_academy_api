@@ -19,7 +19,6 @@ export class GetInscriptionsByAcademicYearUseCase {
       classYearId: inscription.classYearId,
       inscriptionDate: inscription.inscriptionDate,
       status: inscription.status,
-      tuitionFee: inscription.tuitionFee,
       isPaid: inscription.isPaid,
       notes: inscription.notes,
       createdAt: inscription.createdAt,

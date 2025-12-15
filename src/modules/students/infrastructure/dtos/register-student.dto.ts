@@ -70,21 +70,27 @@ export class RegisterStudentDto {
   @IsOptional()
   parentEmail?: string;
 
-  @ApiProperty({ description: 'Class year ID for the current academic year' })
+  @ApiPropertyOptional({ 
+    description: 'Class year ID for the current academic year (takes priority over classCode)',
+    example: '660e8400-e29b-41d4-a716-446655440000',
+  })
   @IsUUID()
-  @IsNotEmpty()
-  classYearId: string;
+  @IsOptional()
+  classYearId?: string;
+
+  @ApiPropertyOptional({ 
+    description: 'Class code (e.g., "G1", "G2") - used if classYearId is not provided',
+    example: 'G1',
+  })
+  @IsString()
+  @IsOptional()
+  classCode?: string;
 
   @ApiProperty({ example: '2025-12-15', description: 'Inscription date' })
   @IsDate()
   @Type(() => Date)
   @IsNotEmpty()
   inscriptionDate: Date;
-
-  @ApiPropertyOptional({ example: 5000, description: 'Tuition fee amount' })
-  @IsNumber()
-  @IsOptional()
-  tuitionFee?: number;
 
   @ApiPropertyOptional({ example: 'Special accommodation needed', description: 'Additional notes' })
   @IsString()

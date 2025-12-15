@@ -1,7 +1,8 @@
-import { Injectable, Inject, ConflictException, NotFoundException } from '@nestjs/common';
+import { Injectable, Inject, ConflictException, NotFoundException, BadRequestException } from '@nestjs/common';
 import * as StudentPort from '../ports/student-repository.port';
 import * as StudentInscriptionPort from '../ports/student-inscription-repository.port';
 import * as ClassYearPort from '../../../classes/application/ports/class-year-repository.port';
+import * as ClassPort from '../../../classes/application/ports/class-repository.port';
 import { 
   RegisterStudentRequest, 
   RegisterStudentResponse 
@@ -17,18 +18,51 @@ export class RegisterStudentUseCase {
     private readonly inscriptionRepository: StudentInscriptionPort.IStudentInscriptionRepository,
     @Inject(ClassYearPort.CLASS_YEAR_REPOSITORY)
     private readonly classYearRepository: ClassYearPort.IClassYearRepository,
+    @Inject(ClassPort.CLASS_REPOSITORY)
+    private readonly classRepository: ClassPort.IClassRepository,
   ) {}
 
   async execute(
     request: RegisterStudentRequest,
     academicYearId: string,
   ): Promise<RegisterStudentResponse> {
-    // Verify class year exists and belongs to the academic year
-    const classYear = await this.classYearRepository.findById(request.classYearId);
-    if (!classYear) {
-      throw new NotFoundException('Class year not found');
+    // Validate that either classYearId or classCode is provided
+    if (!request.classYearId && !request.classCode) {
+      throw new BadRequestException(
+        'Either classYearId or classCode must be provided',
+      );
     }
 
+    let classYear;
+
+    // Priority 1: Use classYearId if provided
+    if (request.classYearId) {
+      classYear = await this.classYearRepository.findById(request.classYearId);
+      if (!classYear) {
+        throw new NotFoundException('Class year not found');
+      }
+    } 
+    // Priority 2: Use classCode to find the class and then its class year
+    else if (request.classCode) {
+      const classEntity = await this.classRepository.findByCode(request.classCode);
+      if (!classEntity) {
+        throw new NotFoundException(`Class with code "${request.classCode}" not found`);
+      }
+
+      // Find the class year for this class and academic year
+      classYear = await this.classYearRepository.findByClassAndAcademicYear(
+        classEntity.id,
+        academicYearId,
+      );
+
+      if (!classYear) {
+        throw new NotFoundException(
+          `Class year not found for class "${request.classCode}" in the current academic year`,
+        );
+      }
+    }
+
+    // Verify class year belongs to the academic year
     if (classYear.academicYearId !== academicYearId) {
       throw new ConflictException('Class year does not belong to the current academic year');
     }
@@ -97,10 +131,9 @@ export class RegisterStudentUseCase {
     const inscription = await this.inscriptionRepository.create({
       studentId: student.id,
       academicYearId: academicYearId,
-      classYearId: request.classYearId,
+      classYearId: classYear.id, // Use the resolved classYear.id
       inscriptionDate: request.inscriptionDate,
       status: InscriptionStatus.CONFIRMED,
-      tuitionFee: request.tuitionFee,
       isPaid: false,
       notes: request.notes,
     });
@@ -135,7 +168,6 @@ export class RegisterStudentUseCase {
         classYearId: fullInscription!.classYearId,
         inscriptionDate: fullInscription!.inscriptionDate,
         status: fullInscription!.status,
-        tuitionFee: fullInscription!.tuitionFee,
         isPaid: fullInscription!.isPaid,
         notes: fullInscription!.notes,
         createdAt: fullInscription!.createdAt,

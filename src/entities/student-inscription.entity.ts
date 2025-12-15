@@ -41,9 +41,6 @@ export class StudentInscription {
   })
   status: InscriptionStatus;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  tuitionFee: number;
-
   @Column({ type: 'boolean', default: false })
   isPaid: boolean;
 

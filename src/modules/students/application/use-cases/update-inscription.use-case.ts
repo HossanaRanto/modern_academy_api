@@ -18,7 +18,6 @@ export class UpdateInscriptionUseCase {
     
     // Update fields if provided
     if (request.status !== undefined) inscription.status = request.status;
-    if (request.tuitionFee !== undefined) inscription.tuitionFee = request.tuitionFee;
     if (request.isPaid !== undefined) inscription.isPaid = request.isPaid;
     if (request.notes !== undefined) inscription.notes = request.notes;
     
@@ -34,7 +33,6 @@ export class UpdateInscriptionUseCase {
       classYearId: fullInscription!.classYearId,
       inscriptionDate: fullInscription!.inscriptionDate,
       status: fullInscription!.status,
-      tuitionFee: fullInscription!.tuitionFee,
       isPaid: fullInscription!.isPaid,
       notes: fullInscription!.notes,
       createdAt: fullInscription!.createdAt,

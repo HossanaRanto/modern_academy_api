@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional, IsNumber, IsBoolean, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsBoolean, IsString } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { InscriptionStatus } from '../../../../entities/student-inscription.entity';
 
@@ -7,11 +7,6 @@ export class UpdateInscriptionDto {
   @IsEnum(InscriptionStatus)
   @IsOptional()
   status?: InscriptionStatus;
-
-  @ApiPropertyOptional({ example: 5000, description: 'Tuition fee amount' })
-  @IsNumber()
-  @IsOptional()
-  tuitionFee?: number;
 
   @ApiPropertyOptional({ example: true, description: 'Whether tuition is paid' })
   @IsBoolean()

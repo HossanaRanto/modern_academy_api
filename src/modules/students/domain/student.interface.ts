@@ -72,9 +72,9 @@ export interface RegisterStudentRequest {
   parentEmail?: string;
   
   // Inscription info
-  classYearId: string;
+  classYearId?: string; // Optional: UUID of the class year (priority 1)
+  classCode?: string; // Optional: Code of the class (e.g., "G1", priority 2)
   inscriptionDate: Date;
-  tuitionFee?: number;
   notes?: string;
 }
 
@@ -83,14 +83,12 @@ export interface CreateInscriptionRequest {
   classYearId: string;
   inscriptionDate: Date;
   status?: InscriptionStatus;
-  tuitionFee?: number;
   isPaid?: boolean;
   notes?: string;
 }
 
 export interface UpdateInscriptionRequest {
   status?: InscriptionStatus;
-  tuitionFee?: number;
   isPaid?: boolean;
   notes?: string;
 }
@@ -102,7 +100,6 @@ export interface InscriptionResponse {
   classYearId: string;
   inscriptionDate: Date;
   status: InscriptionStatus;
-  tuitionFee?: number;
   isPaid: boolean;
   notes?: string;
   createdAt: Date;
