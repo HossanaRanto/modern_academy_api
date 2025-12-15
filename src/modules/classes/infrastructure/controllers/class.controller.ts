@@ -30,6 +30,7 @@ import { DeleteClassUseCase } from '../../application/use-cases/delete-class.use
 import { CreateClassYearUseCase } from '../../application/use-cases/create-class-year.use-case';
 import { GetClassYearsByAcademicYearUseCase } from '../../application/use-cases/get-class-years-by-academic-year.use-case';
 import { UpdateClassYearUseCase } from '../../application/use-cases/update-class-year.use-case';
+import { SeedDefaultClassesUseCase } from '../../application/use-cases/seed-default-classes.use-case';
 import { CreateClassDto } from '../dtos/create-class.dto';
 import { UpdateClassDto } from '../dtos/update-class.dto';
 import { CreateClassYearDto } from '../dtos/create-class-year.dto';
@@ -56,6 +57,7 @@ export class ClassController {
     private readonly createClassYearUseCase: CreateClassYearUseCase,
     private readonly getClassYearsByAcademicYearUseCase: GetClassYearsByAcademicYearUseCase,
     private readonly updateClassYearUseCase: UpdateClassYearUseCase,
+    private readonly seedDefaultClassesUseCase: SeedDefaultClassesUseCase,
   ) {}
 
   @Post()
@@ -267,5 +269,38 @@ export class ClassController {
     @Body() request: UpdateClassYearDto,
   ) {
     return this.updateClassYearUseCase.execute(id, request);
+  }
+
+  @Post('seed/defaults')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ 
+    summary: 'Seed default classes',
+    description: 'Loads and creates default classes from JSON configuration. Skips classes that already exist.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Default classes seeded successfully',
+    schema: {
+      example: {
+        created: [
+          {
+            id: '660e8400-e29b-41d4-a716-446655440000',
+            name: 'Grade 1',
+            code: 'G1',
+            level: 1,
+            description: 'First grade elementary class',
+            capacity: 30,
+            isActive: true,
+            createdAt: '2025-12-15T10:00:00.000Z',
+            updatedAt: '2025-12-15T10:00:00.000Z',
+          },
+        ],
+        skipped: ['G2', 'G3'],
+      },
+    },
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async seedDefaultClasses(@TenantId() academyId: string) {
+    return this.seedDefaultClassesUseCase.execute(academyId);
   }
 }

@@ -1,0 +1,581 @@
+{
+  "Kindergarten": [
+    {
+      "name": "Pre-Reading",
+      "code": "KG-READ",
+      "description": "Introduction to letters and sounds",
+      "coefficient": 1,
+      "category": "Language Arts"
+    },
+    {
+      "name": "Pre-Math",
+      "code": "KG-MATH",
+      "description": "Basic numbers and counting",
+      "coefficient": 1,
+      "category": "Mathematics"
+    },
+    {
+      "name": "Art & Crafts",
+      "code": "KG-ART",
+      "description": "Creative expression through art",
+      "coefficient": 1,
+      "category": "Arts"
+    },
+    {
+      "name": "Physical Education",
+      "code": "KG-PE",
+      "description": "Physical activities and games",
+      "coefficient": 1,
+      "category": "Physical Education"
+    }
+  ],
+  "Grade 1": [
+    {
+      "name": "English Language Arts",
+      "code": "G1-ELA",
+      "description": "Reading, writing, and language skills",
+      "coefficient": 3,
+      "category": "Language Arts"
+    },
+    {
+      "name": "Mathematics",
+      "code": "G1-MATH",
+      "description": "Basic arithmetic and problem solving",
+      "coefficient": 3,
+      "category": "Mathematics"
+    },
+    {
+      "name": "Science",
+      "code": "G1-SCI",
+      "description": "Introduction to scientific concepts",
+      "coefficient": 2,
+      "category": "Science"
+    },
+    {
+      "name": "Social Studies",
+      "code": "G1-SS",
+      "description": "Community and basic geography",
+      "coefficient": 2,
+      "category": "Social Studies"
+    },
+    {
+      "name": "Art",
+      "code": "G1-ART",
+      "description": "Visual arts and creativity",
+      "coefficient": 1,
+      "category": "Arts"
+    },
+    {
+      "name": "Physical Education",
+      "code": "G1-PE",
+      "description": "Physical fitness and sports",
+      "coefficient": 1,
+      "category": "Physical Education"
+    }
+  ],
+  "Grade 2": [
+    {
+      "name": "English Language Arts",
+      "code": "G2-ELA",
+      "description": "Reading comprehension and writing",
+      "coefficient": 3,
+      "category": "Language Arts"
+    },
+    {
+      "name": "Mathematics",
+      "code": "G2-MATH",
+      "description": "Addition, subtraction, and place value",
+      "coefficient": 3,
+      "category": "Mathematics"
+    },
+    {
+      "name": "Science",
+      "code": "G2-SCI",
+      "description": "Life and physical sciences",
+      "coefficient": 2,
+      "category": "Science"
+    },
+    {
+      "name": "Social Studies",
+      "code": "G2-SS",
+      "description": "Geography and history basics",
+      "coefficient": 2,
+      "category": "Social Studies"
+    },
+    {
+      "name": "Art",
+      "code": "G2-ART",
+      "description": "Creative arts exploration",
+      "coefficient": 1,
+      "category": "Arts"
+    },
+    {
+      "name": "Physical Education",
+      "code": "G2-PE",
+      "description": "Sports and physical activities",
+      "coefficient": 1,
+      "category": "Physical Education"
+    }
+  ],
+  "Grade 3": [
+    {
+      "name": "English Language Arts",
+      "code": "G3-ELA",
+      "description": "Literature and composition",
+      "coefficient": 3,
+      "category": "Language Arts"
+    },
+    {
+      "name": "Mathematics",
+      "code": "G3-MATH",
+      "description": "Multiplication, division, and fractions",
+      "coefficient": 3,
+      "category": "Mathematics"
+    },
+    {
+      "name": "Science",
+      "code": "G3-SCI",
+      "description": "Earth and space sciences",
+      "coefficient": 2,
+      "category": "Science"
+    },
+    {
+      "name": "Social Studies",
+      "code": "G3-SS",
+      "description": "Communities and cultures",
+      "coefficient": 2,
+      "category": "Social Studies"
+    },
+    {
+      "name": "Art",
+      "code": "G3-ART",
+      "description": "Visual arts techniques",
+      "coefficient": 1,
+      "category": "Arts"
+    },
+    {
+      "name": "Physical Education",
+      "code": "G3-PE",
+      "description": "Team sports and fitness",
+      "coefficient": 1,
+      "category": "Physical Education"
+    }
+  ],
+  "Grade 4": [
+    {
+      "name": "English Language Arts",
+      "code": "G4-ELA",
+      "description": "Advanced reading and writing",
+      "coefficient": 3,
+      "category": "Language Arts"
+    },
+    {
+      "name": "Mathematics",
+      "code": "G4-MATH",
+      "description": "Decimals, fractions, and geometry",
+      "coefficient": 3,
+      "category": "Mathematics"
+    },
+    {
+      "name": "Science",
+      "code": "G4-SCI",
+      "description": "Scientific inquiry and experimentation",
+      "coefficient": 2,
+      "category": "Science"
+    },
+    {
+      "name": "Social Studies",
+      "code": "G4-SS",
+      "description": "State and national history",
+      "coefficient": 2,
+      "category": "Social Studies"
+    },
+    {
+      "name": "Art",
+      "code": "G4-ART",
+      "description": "Art history and creation",
+      "coefficient": 1,
+      "category": "Arts"
+    },
+    {
+      "name": "Physical Education",
+      "code": "G4-PE",
+      "description": "Athletic skills development",
+      "coefficient": 1,
+      "category": "Physical Education"
+    }
+  ],
+  "Grade 5": [
+    {
+      "name": "English Language Arts",
+      "code": "G5-ELA",
+      "description": "Literary analysis and persuasive writing",
+      "coefficient": 3,
+      "category": "Language Arts"
+    },
+    {
+      "name": "Mathematics",
+      "code": "G5-MATH",
+      "description": "Advanced operations and pre-algebra",
+      "coefficient": 3,
+      "category": "Mathematics"
+    },
+    {
+      "name": "Science",
+      "code": "G5-SCI",
+      "description": "Physical and life sciences",
+      "coefficient": 2,
+      "category": "Science"
+    },
+    {
+      "name": "Social Studies",
+      "code": "G5-SS",
+      "description": "American history and geography",
+      "coefficient": 2,
+      "category": "Social Studies"
+    },
+    {
+      "name": "Art",
+      "code": "G5-ART",
+      "description": "Advanced art techniques",
+      "coefficient": 1,
+      "category": "Arts"
+    },
+    {
+      "name": "Physical Education",
+      "code": "G5-PE",
+      "description": "Competitive sports and fitness",
+      "coefficient": 1,
+      "category": "Physical Education"
+    }
+  ],
+  "Grade 6": [
+    {
+      "name": "English Language Arts",
+      "code": "G6-ELA",
+      "description": "Literature and composition",
+      "coefficient": 3,
+      "category": "Language Arts"
+    },
+    {
+      "name": "Mathematics",
+      "code": "G6-MATH",
+      "description": "Pre-algebra and ratios",
+      "coefficient": 3,
+      "category": "Mathematics"
+    },
+    {
+      "name": "Science",
+      "code": "G6-SCI",
+      "description": "Earth science and biology",
+      "coefficient": 2,
+      "category": "Science"
+    },
+    {
+      "name": "Social Studies",
+      "code": "G6-SS",
+      "description": "World history and cultures",
+      "coefficient": 2,
+      "category": "Social Studies"
+    },
+    {
+      "name": "Art",
+      "code": "G6-ART",
+      "description": "Creative expression",
+      "coefficient": 1,
+      "category": "Arts"
+    },
+    {
+      "name": "Physical Education",
+      "code": "G6-PE",
+      "description": "Physical fitness and wellness",
+      "coefficient": 1,
+      "category": "Physical Education"
+    },
+    {
+      "name": "Music",
+      "code": "G6-MUS",
+      "description": "Music theory and practice",
+      "coefficient": 1,
+      "category": "Arts"
+    }
+  ],
+  "Grade 7": [
+    {
+      "name": "English Language Arts",
+      "code": "G7-ELA",
+      "description": "Advanced literature and writing",
+      "coefficient": 3,
+      "category": "Language Arts"
+    },
+    {
+      "name": "Mathematics",
+      "code": "G7-MATH",
+      "description": "Algebra I",
+      "coefficient": 3,
+      "category": "Mathematics"
+    },
+    {
+      "name": "Science",
+      "code": "G7-SCI",
+      "description": "Life science and chemistry",
+      "coefficient": 3,
+      "category": "Science"
+    },
+    {
+      "name": "Social Studies",
+      "code": "G7-SS",
+      "description": "World geography and civilizations",
+      "coefficient": 2,
+      "category": "Social Studies"
+    },
+    {
+      "name": "Art",
+      "code": "G7-ART",
+      "description": "Visual arts studio",
+      "coefficient": 1,
+      "category": "Arts"
+    },
+    {
+      "name": "Physical Education",
+      "code": "G7-PE",
+      "description": "Sports and health education",
+      "coefficient": 1,
+      "category": "Physical Education"
+    },
+    {
+      "name": "Music",
+      "code": "G7-MUS",
+      "description": "Instrumental or vocal music",
+      "coefficient": 1,
+      "category": "Arts"
+    }
+  ],
+  "Grade 8": [
+    {
+      "name": "English Language Arts",
+      "code": "G8-ELA",
+      "description": "Literary criticism and rhetoric",
+      "coefficient": 3,
+      "category": "Language Arts"
+    },
+    {
+      "name": "Mathematics",
+      "code": "G8-MATH",
+      "description": "Geometry or Algebra II",
+      "coefficient": 3,
+      "category": "Mathematics"
+    },
+    {
+      "name": "Science",
+      "code": "G8-SCI",
+      "description": "Physical science and physics",
+      "coefficient": 3,
+      "category": "Science"
+    },
+    {
+      "name": "Social Studies",
+      "code": "G8-SS",
+      "description": "American history",
+      "coefficient": 2,
+      "category": "Social Studies"
+    },
+    {
+      "name": "Art",
+      "code": "G8-ART",
+      "description": "Advanced visual arts",
+      "coefficient": 1,
+      "category": "Arts"
+    },
+    {
+      "name": "Physical Education",
+      "code": "G8-PE",
+      "description": "Athletic training and wellness",
+      "coefficient": 1,
+      "category": "Physical Education"
+    },
+    {
+      "name": "Music",
+      "code": "G8-MUS",
+      "description": "Music performance",
+      "coefficient": 1,
+      "category": "Arts"
+    }
+  ],
+  "Grade 9": [
+    {
+      "name": "English I",
+      "code": "G9-ENG",
+      "description": "Literature and composition",
+      "coefficient": 4,
+      "category": "Language Arts"
+    },
+    {
+      "name": "Algebra I",
+      "code": "G9-ALG1",
+      "description": "Foundation of algebra",
+      "coefficient": 4,
+      "category": "Mathematics"
+    },
+    {
+      "name": "Biology",
+      "code": "G9-BIO",
+      "description": "Introduction to biological sciences",
+      "coefficient": 4,
+      "category": "Science"
+    },
+    {
+      "name": "World History",
+      "code": "G9-WHIST",
+      "description": "Global historical perspectives",
+      "coefficient": 3,
+      "category": "Social Studies"
+    },
+    {
+      "name": "Physical Education",
+      "code": "G9-PE",
+      "description": "Health and fitness",
+      "coefficient": 2,
+      "category": "Physical Education"
+    },
+    {
+      "name": "Foreign Language",
+      "code": "G9-LANG",
+      "description": "Introduction to world language",
+      "coefficient": 3,
+      "category": "Language"
+    }
+  ],
+  "Grade 10": [
+    {
+      "name": "English II",
+      "code": "G10-ENG",
+      "description": "World literature and writing",
+      "coefficient": 4,
+      "category": "Language Arts"
+    },
+    {
+      "name": "Geometry",
+      "code": "G10-GEOM",
+      "description": "Geometric principles and proofs",
+      "coefficient": 4,
+      "category": "Mathematics"
+    },
+    {
+      "name": "Chemistry",
+      "code": "G10-CHEM",
+      "description": "Chemical principles and reactions",
+      "coefficient": 4,
+      "category": "Science"
+    },
+    {
+      "name": "World Geography",
+      "code": "G10-WGEO",
+      "description": "Physical and human geography",
+      "coefficient": 3,
+      "category": "Social Studies"
+    },
+    {
+      "name": "Physical Education",
+      "code": "G10-PE",
+      "description": "Sports and wellness",
+      "coefficient": 2,
+      "category": "Physical Education"
+    },
+    {
+      "name": "Foreign Language",
+      "code": "G10-LANG",
+      "description": "Intermediate world language",
+      "coefficient": 3,
+      "category": "Language"
+    }
+  ],
+  "Grade 11": [
+    {
+      "name": "English III",
+      "code": "G11-ENG",
+      "description": "American literature",
+      "coefficient": 4,
+      "category": "Language Arts"
+    },
+    {
+      "name": "Algebra II",
+      "code": "G11-ALG2",
+      "description": "Advanced algebraic concepts",
+      "coefficient": 4,
+      "category": "Mathematics"
+    },
+    {
+      "name": "Physics",
+      "code": "G11-PHYS",
+      "description": "Mechanics and energy",
+      "coefficient": 4,
+      "category": "Science"
+    },
+    {
+      "name": "U.S. History",
+      "code": "G11-USHIST",
+      "description": "American history in depth",
+      "coefficient": 3,
+      "category": "Social Studies"
+    },
+    {
+      "name": "Physical Education",
+      "code": "G11-PE",
+      "description": "Advanced fitness",
+      "coefficient": 2,
+      "category": "Physical Education"
+    },
+    {
+      "name": "Foreign Language",
+      "code": "G11-LANG",
+      "description": "Advanced world language",
+      "coefficient": 3,
+      "category": "Language"
+    }
+  ],
+  "Grade 12": [
+    {
+      "name": "English IV",
+      "code": "G12-ENG",
+      "description": "British literature and advanced composition",
+      "coefficient": 4,
+      "category": "Language Arts"
+    },
+    {
+      "name": "Pre-Calculus",
+      "code": "G12-PRECALC",
+      "description": "Advanced mathematics preparation",
+      "coefficient": 4,
+      "category": "Mathematics"
+    },
+    {
+      "name": "Advanced Science",
+      "code": "G12-ASCI",
+      "description": "AP or advanced science elective",
+      "coefficient": 4,
+      "category": "Science"
+    },
+    {
+      "name": "Government/Economics",
+      "code": "G12-GOVECON",
+      "description": "Civics and economic principles",
+      "coefficient": 3,
+      "category": "Social Studies"
+    },
+    {
+      "name": "Physical Education",
+      "code": "G12-PE",
+      "description": "Lifetime fitness",
+      "coefficient": 2,
+      "category": "Physical Education"
+    },
+    {
+      "name": "Foreign Language",
+      "code": "G12-LANG",
+      "description": "Mastery level world language",
+      "coefficient": 3,
+      "category": "Language"
+    }
+  ]
+}

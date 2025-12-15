@@ -30,6 +30,7 @@ import { DeleteCourseUseCase } from '../../application/use-cases/delete-course.u
 import { CreateCourseClassUseCase } from '../../application/use-cases/create-course-class.use-case';
 import { GetCourseClassesByClassYearUseCase } from '../../application/use-cases/get-course-classes-by-class-year.use-case';
 import { UpdateCourseClassUseCase } from '../../application/use-cases/update-course-class.use-case';
+import { SeedDefaultCoursesUseCase } from '../../application/use-cases/seed-default-courses.use-case';
 import { CreateCourseDto } from '../dtos/create-course.dto';
 import { UpdateCourseDto } from '../dtos/update-course.dto';
 import { CreateCourseClassDto } from '../dtos/create-course-class.dto';
@@ -38,6 +39,8 @@ import { JwtAuthGuard } from '../../../../shared/guards/jwt-auth.guard';
 import { TenantGuard } from '../../../../shared/guards/tenant.guard';
 import { TenantRequired } from '../../../../shared/decorators/tenant-required.decorator';
 import { TenantId } from '../../../../shared/decorators/tenant-id.decorator';
+import { CurrentAcademicYear } from '../../../../shared/decorators/current-academic-year.decorator';
+import { RequireAcademicYear } from '../../../../shared/decorators/require-academic-year.decorator';
 
 @ApiTags('Courses')
 @ApiBearerAuth('JWT-auth')
@@ -54,6 +57,7 @@ export class CourseController {
     private readonly createCourseClassUseCase: CreateCourseClassUseCase,
     private readonly getCourseClassesByClassYearUseCase: GetCourseClassesByClassYearUseCase,
     private readonly updateCourseClassUseCase: UpdateCourseClassUseCase,
+    private readonly seedDefaultCoursesUseCase: SeedDefaultCoursesUseCase,
   ) {}
 
   @Post()
@@ -270,5 +274,59 @@ export class CourseController {
     @Body() request: UpdateCourseClassDto,
   ) {
     return this.updateCourseClassUseCase.execute(id, request);
+  }
+
+  @Post('seed/defaults')
+  @HttpCode(HttpStatus.CREATED)
+  @RequireAcademicYear()
+  @ApiOperation({ 
+    summary: 'Seed default courses',
+    description: 'Loads and creates default courses from JSON configuration, mapped to class names. Creates course classes for the current academic year. Requires that classes and class years exist.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Default courses seeded successfully',
+    schema: {
+      example: {
+        courses: {
+          created: [
+            {
+              id: '660e8400-e29b-41d4-a716-446655440000',
+              name: 'Mathematics',
+              code: 'G1-MATH',
+              description: 'Basic arithmetic and problem solving',
+              coefficient: 3,
+              category: 'Mathematics',
+              isActive: true,
+              createdAt: '2025-12-15T10:00:00.000Z',
+              updatedAt: '2025-12-15T10:00:00.000Z',
+            },
+          ],
+          skipped: ['G2-MATH'],
+        },
+        courseClasses: {
+          created: [
+            {
+              id: '660e8400-e29b-41d4-a716-446655440001',
+              courseId: '660e8400-e29b-41d4-a716-446655440000',
+              classYearId: '660e8400-e29b-41d4-a716-446655440002',
+              coefficient: 3,
+              isActive: true,
+              createdAt: '2025-12-15T10:00:00.000Z',
+              updatedAt: '2025-12-15T10:00:00.000Z',
+            },
+          ],
+          skipped: [],
+          errors: [],
+        },
+      },
+    },
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async seedDefaultCourses(
+    @TenantId() academyId: string,
+    @CurrentAcademicYear() academicYearId: string,
+  ) {
+    return this.seedDefaultCoursesUseCase.execute(academyId, academicYearId);
   }
 }

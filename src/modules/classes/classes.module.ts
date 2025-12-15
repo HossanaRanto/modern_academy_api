@@ -11,6 +11,7 @@ import { DeleteClassUseCase } from './application/use-cases/delete-class.use-cas
 import { CreateClassYearUseCase } from './application/use-cases/create-class-year.use-case';
 import { GetClassYearsByAcademicYearUseCase } from './application/use-cases/get-class-years-by-academic-year.use-case';
 import { UpdateClassYearUseCase } from './application/use-cases/update-class-year.use-case';
+import { SeedDefaultClassesUseCase } from './application/use-cases/seed-default-classes.use-case';
 import { ClassRepositoryAdapter } from './infrastructure/adapters/class-repository.adapter';
 import { ClassYearRepositoryAdapter } from './infrastructure/adapters/class-year-repository.adapter';
 import { CLASS_REPOSITORY } from './application/ports/class-repository.port';
@@ -28,6 +29,7 @@ import { CLASS_YEAR_REPOSITORY } from './application/ports/class-year-repository
     CreateClassYearUseCase,
     GetClassYearsByAcademicYearUseCase,
     UpdateClassYearUseCase,
+    SeedDefaultClassesUseCase,
     {
       provide: CLASS_REPOSITORY,
       useClass: ClassRepositoryAdapter,
