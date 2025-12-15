@@ -29,6 +29,13 @@ export class AcademicYearGuard implements CanActivate {
     const user = request.user;
     const academicYearId = request.headers['x-academic-year-id'];
 
+    // If required but header not provided, throw BadRequest immediately
+    if (isRequired && !academicYearId) {
+      throw new BadRequestException(
+        'Academic year is required. Please provide x-academic-year-id header.',
+      );
+    }
+
     // If not required and no header provided, just continue
     if (!isRequired && !academicYearId) {
       return true;
@@ -58,29 +65,6 @@ export class AcademicYearGuard implements CanActivate {
       request.academicYearId = academicYearId;
       request.academicYear = academicYear;
       return true;
-    }
-
-    // If required but not provided, try to get the current one
-    if (isRequired) {
-      if (!user || !user.academyId) {
-        throw new ForbiddenException('User must belong to an academy');
-      }
-
-      const currentYear = await this.academicYearRepository.findOne({
-        where: { 
-          academyId: user.academyId,
-          isCurrent: true,
-        },
-      });
-
-      if (!currentYear) {
-        throw new BadRequestException(
-          'No current academic year found for your academy. Please provide X-Academic-Year-ID header or set a current academic year.',
-        );
-      }
-
-      request.academicYearId = currentYear.id;
-      request.academicYear = currentYear;
     }
 
     return true;

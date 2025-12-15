@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_INTERCEPTOR, APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CacheModule } from '@nestjs/cache-manager';
 import { AppController } from './app.controller';
@@ -10,7 +10,9 @@ import { StudentsModule } from './modules/students/students.module';
 import { ClassesModule } from './modules/classes/classes.module';
 import { CoursesModule } from './modules/courses/courses.module';
 import { TenantInterceptor } from './shared/interceptors/tenant.interceptor';
+import { AcademicYearGuard } from './shared/guards/academic-year.guard';
 import { CacheConfigService } from './config/cache.config';
+import { AcademicYear } from './entities/academic-year.entity';
 
 @Module({
   imports: [
@@ -27,6 +29,7 @@ import { CacheConfigService } from './config/cache.config';
       autoLoadEntities: true,
       logging: process.env.NODE_ENV === 'development',
     }),
+    TypeOrmModule.forFeature([AcademicYear]),
     CacheModule.registerAsync({
       isGlobal: true,
       useClass: CacheConfigService,
@@ -43,6 +46,10 @@ import { CacheConfigService } from './config/cache.config';
     {
       provide: APP_INTERCEPTOR,
       useClass: TenantInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AcademicYearGuard,
     },
   ],
 })

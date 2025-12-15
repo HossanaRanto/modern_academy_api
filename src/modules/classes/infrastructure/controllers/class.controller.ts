@@ -341,8 +341,6 @@ export class ClassController {
   async seedDefaultClasses(
     @CurrentAcademicYear() academicYearId: string,
   ) {
-    console.log("academic",academicYearId);
-    
     return this.seedDefaultClassesUseCase.execute(academicYearId);
   }
 }
