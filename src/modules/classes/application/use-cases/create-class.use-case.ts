@@ -16,6 +16,14 @@ export class CreateClassUseCase {
       throw new ConflictException('Class with this code already exists');
     }
 
+    // Validate child class if provided
+    if (request.childClassId) {
+      const childClass = await this.classRepository.findById(request.childClassId);
+      if (!childClass) {
+        throw new ConflictException('Child class not found');
+      }
+    }
+
     // Create class
     const classEntity = await this.classRepository.create({
       name: request.name,
@@ -23,6 +31,7 @@ export class CreateClassUseCase {
       level: request.level,
       description: request.description,
       capacity: request.capacity,
+      childClassId: request.childClassId,
       isActive: true,
     });
 
@@ -33,6 +42,7 @@ export class CreateClassUseCase {
       level: classEntity.level,
       description: classEntity.description,
       capacity: classEntity.capacity,
+      childClassId: classEntity.childClassId,
       isActive: classEntity.isActive,
       createdAt: classEntity.createdAt,
       updatedAt: classEntity.updatedAt,

@@ -23,6 +23,17 @@ export class UpdateClassUseCase {
       }
     }
 
+    // Validate child class if provided
+    if (request.childClassId !== undefined) {
+      if (request.childClassId) {
+        const childClass = await this.classRepository.findById(request.childClassId);
+        if (!childClass) {
+          throw new ConflictException('Child class not found');
+        }
+      }
+      classEntity.childClassId = request.childClassId;
+    }
+
     // Update fields
     if (request.name !== undefined) classEntity.name = request.name;
     if (request.code !== undefined) classEntity.code = request.code;
@@ -40,6 +51,7 @@ export class UpdateClassUseCase {
       level: saved.level,
       description: saved.description,
       capacity: saved.capacity,
+      childClassId: saved.childClassId,
       isActive: saved.isActive,
       createdAt: saved.createdAt,
       updatedAt: saved.updatedAt,

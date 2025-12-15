@@ -4,6 +4,7 @@ export interface CreateClassRequest {
   level: number;
   description?: string;
   capacity?: number;
+  childClassId?: string;
 }
 
 export interface UpdateClassRequest {
@@ -13,6 +14,7 @@ export interface UpdateClassRequest {
   description?: string;
   capacity?: number;
   isActive?: boolean;
+  childClassId?: string;
 }
 
 export interface ClassResponse {
@@ -23,6 +25,7 @@ export interface ClassResponse {
   description?: string;
   capacity?: number;
   isActive: boolean;
+  childClassId?: string;
   createdAt: Date;
   updatedAt: Date;
 }

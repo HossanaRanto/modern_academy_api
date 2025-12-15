@@ -5,6 +5,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  ManyToOne,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { ClassYear } from './class-year.entity.js';
 
@@ -31,8 +34,20 @@ export class Class {
   @Column({ type: 'boolean', default: true })
   isActive: boolean;
 
+  @Column({ type: 'uuid', nullable: true })
+  childClassId: string;
+
   @OneToMany(() => ClassYear, (classYear) => classYear.class)
   classYears: ClassYear[];
+
+  // A class can have one child class (next level)
+  @OneToOne(() => Class, (classEntity) => classEntity.parentClass, { nullable: true })
+  @JoinColumn({ name: 'childClassId' })
+  childClass: Class;
+
+  // A class can be the child of many parent classes
+  @ManyToOne(() => Class, (classEntity) => classEntity.childClass, { nullable: true })
+  parentClass: Class;
 
   @CreateDateColumn()
   createdAt: Date;

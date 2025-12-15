@@ -21,6 +21,7 @@ export class GetClassesUseCase {
       level: classEntity.level,
       description: classEntity.description,
       capacity: classEntity.capacity,
+      childClassId: classEntity.childClassId,
       isActive: classEntity.isActive,
       createdAt: classEntity.createdAt,
       updatedAt: classEntity.updatedAt,

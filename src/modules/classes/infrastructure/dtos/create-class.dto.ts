@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsOptional, IsInt, Min } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsInt, Min, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateClassDto {
@@ -44,4 +44,13 @@ export class CreateClassDto {
   @Min(1)
   @IsOptional()
   capacity?: number;
+
+  @ApiProperty({
+    description: 'Child class ID (next grade level)',
+    example: '660e8400-e29b-41d4-a716-446655440000',
+    required: false,
+  })
+  @IsUUID()
+  @IsOptional()
+  childClassId?: string;
 }
