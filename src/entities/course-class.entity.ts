@@ -43,9 +43,6 @@ export class CourseClass {
   @JoinColumn({ name: 'classYearId' })
   classYear: ClassYear;
 
-  @OneToMany(() => Test, (test) => test.courseClass)
-  tests: Test[];
-
   @CreateDateColumn()
   createdAt: Date;
 

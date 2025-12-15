@@ -42,23 +42,10 @@ export class Test {
   percentage: number;
 
   @Column({ type: 'uuid' })
-  courseClassId: string;
-
-  @Column({ type: 'uuid' })
   trimesterId: string;
 
   @Column({ type: 'text', nullable: true })
   description: string;
-
-  @Column({ type: 'int', nullable: true })
-  duration: number;
-
-  @Column({ type: 'boolean', default: true })
-  isActive: boolean;
-
-  @ManyToOne(() => CourseClass, (courseClass) => courseClass.tests)
-  @JoinColumn({ name: 'courseClassId' })
-  courseClass: CourseClass;
 
   @ManyToOne(() => Trimester, (trimester) => trimester.tests)
   @JoinColumn({ name: 'trimesterId' })

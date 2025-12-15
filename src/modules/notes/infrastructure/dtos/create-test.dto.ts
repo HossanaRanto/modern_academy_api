@@ -50,14 +50,6 @@ export class CreateTestDto {
   percentage: number;
 
   @ApiProperty({
-    description: 'ID of the course class',
-    example: '550e8400-e29b-41d4-a716-446655440000',
-  })
-  @IsUUID()
-  @IsNotEmpty()
-  courseClassId: string;
-
-  @ApiProperty({
     description: 'ID of the trimester',
     example: '660e8400-e29b-41d4-a716-446655440000',
   })

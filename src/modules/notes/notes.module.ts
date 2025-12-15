@@ -13,7 +13,6 @@ import { UpdateTrimesterUseCase } from './application/use-cases/update-trimester
 import { DeleteTrimesterUseCase } from './application/use-cases/delete-trimester.use-case';
 import { CreateTestUseCase } from './application/use-cases/create-test.use-case';
 import { GetTestsByTrimesterUseCase } from './application/use-cases/get-tests-by-trimester.use-case';
-import { GetTestsByCourseClassUseCase } from './application/use-cases/get-tests-by-course-class.use-case';
 import { GetTestByIdUseCase } from './application/use-cases/get-test-by-id.use-case';
 import { UpdateTestUseCase } from './application/use-cases/update-test.use-case';
 import { DeleteTestUseCase } from './application/use-cases/delete-test.use-case';
@@ -37,7 +36,6 @@ import { NOTE_REPOSITORY } from './application/ports/note-repository.port';
     // Test use cases
     CreateTestUseCase,
     GetTestsByTrimesterUseCase,
-    GetTestsByCourseClassUseCase,
     GetTestByIdUseCase,
     UpdateTestUseCase,
     DeleteTestUseCase,

@@ -14,33 +14,14 @@ export class TestRepositoryAdapter implements ITestRepository {
   async findById(id: string): Promise<Test | null> {
     return this.testRepository.findOne({
       where: { id },
-      relations: ['trimester', 'courseClass', 'courseClass.course', 'courseClass.classYear'],
+      relations: ['trimester'],
     });
   }
 
   async findByTrimester(trimesterId: string): Promise<Test[]> {
     return this.testRepository.find({
       where: { trimesterId },
-      relations: ['courseClass', 'courseClass.course', 'trimester'],
-      order: { date: 'ASC' },
-    });
-  }
-
-  async findByCourseClass(courseClassId: string): Promise<Test[]> {
-    return this.testRepository.find({
-      where: { courseClassId },
-      relations: ['trimester', 'courseClass', 'courseClass.course'],
-      order: { date: 'ASC' },
-    });
-  }
-
-  async findByCourseClassAndTrimester(
-    courseClassId: string,
-    trimesterId: string,
-  ): Promise<Test[]> {
-    return this.testRepository.find({
-      where: { courseClassId, trimesterId },
-      relations: ['trimester', 'courseClass', 'courseClass.course'],
+      relations: ['trimester'],
       order: { date: 'ASC' },
     });
   }

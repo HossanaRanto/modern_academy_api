@@ -7,7 +7,6 @@ import {
   Param,
   Patch,
   Delete,
-  Query,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
@@ -18,11 +17,9 @@ import {
   ApiBody,
   ApiBearerAuth,
   ApiParam,
-  ApiQuery,
 } from '@nestjs/swagger';
 import { CreateTestUseCase } from '../../application/use-cases/create-test.use-case';
 import { GetTestsByTrimesterUseCase } from '../../application/use-cases/get-tests-by-trimester.use-case';
-import { GetTestsByCourseClassUseCase } from '../../application/use-cases/get-tests-by-course-class.use-case';
 import { GetTestByIdUseCase } from '../../application/use-cases/get-test-by-id.use-case';
 import { UpdateTestUseCase } from '../../application/use-cases/update-test.use-case';
 import { DeleteTestUseCase } from '../../application/use-cases/delete-test.use-case';
@@ -44,7 +41,6 @@ export class TestController {
   constructor(
     private readonly createTestUseCase: CreateTestUseCase,
     private readonly getTestsByTrimesterUseCase: GetTestsByTrimesterUseCase,
-    private readonly getTestsByCourseClassUseCase: GetTestsByCourseClassUseCase,
     private readonly getTestByIdUseCase: GetTestByIdUseCase,
     private readonly updateTestUseCase: UpdateTestUseCase,
     private readonly deleteTestUseCase: DeleteTestUseCase,
@@ -54,7 +50,7 @@ export class TestController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: 'Create a new test',
-    description: 'Create a new test for a course class and trimester.',
+    description: 'Create a new test for a trimester.',
   })
   @ApiBody({ type: CreateTestDto })
   @ApiResponse({
@@ -63,13 +59,12 @@ export class TestController {
     schema: {
       example: {
         id: '880e8400-e29b-41d4-a716-446655440000',
-        name: 'Mathematics Mid-Term Exam',
+        name: 'Mid-Term Exam',
         type: 'exam',
         date: '2025-12-15',
         percentage: 50,
-        courseClassId: '550e8400-e29b-41d4-a716-446655440000',
         trimesterId: '770e8400-e29b-41d4-a716-446655440000',
-        description: 'Chapters 1-5 covered',
+        description: 'First trimester mid-term exam',
         createdAt: '2025-12-15T10:00:00.000Z',
         updatedAt: '2025-12-15T10:00:00.000Z',
       },
@@ -99,13 +94,12 @@ export class TestController {
       example: [
         {
           id: '880e8400-e29b-41d4-a716-446655440000',
-          name: 'Mathematics Mid-Term Exam',
+          name: 'Mid-Term Exam',
           type: 'exam',
           date: '2025-12-15',
           percentage: 50,
-          courseClassId: '550e8400-e29b-41d4-a716-446655440000',
           trimesterId: '770e8400-e29b-41d4-a716-446655440000',
-          description: 'Chapters 1-5 covered',
+          description: 'First trimester mid-term exam',
         },
       ],
     },
@@ -113,35 +107,6 @@ export class TestController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getTestsByTrimester(@Param('trimesterId') trimesterId: string) {
     return this.getTestsByTrimesterUseCase.execute(trimesterId);
-  }
-
-  @Get('course-class/:courseClassId')
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({
-    summary: 'Get tests by course class',
-    description: 'Retrieve all tests for a specific course class, optionally filtered by trimester.',
-  })
-  @ApiParam({
-    name: 'courseClassId',
-    description: 'Course Class UUID',
-    example: '550e8400-e29b-41d4-a716-446655440000',
-  })
-  @ApiQuery({
-    name: 'trimesterId',
-    required: false,
-    description: 'Filter by trimester UUID',
-    example: '770e8400-e29b-41d4-a716-446655440000',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'List of tests',
-  })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getTestsByCourseClass(
-    @Param('courseClassId') courseClassId: string,
-    @Query('trimesterId') trimesterId?: string,
-  ) {
-    return this.getTestsByCourseClassUseCase.execute(courseClassId, trimesterId);
   }
 
   @Get(':id')
