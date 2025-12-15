@@ -9,6 +9,7 @@ import { AcademyModule } from './modules/academy/academy.module';
 import { StudentsModule } from './modules/students/students.module';
 import { ClassesModule } from './modules/classes/classes.module';
 import { CoursesModule } from './modules/courses/courses.module';
+import { NotesModule } from './modules/notes/notes.module';
 import { TenantInterceptor } from './shared/interceptors/tenant.interceptor';
 import { AcademicYearGuard } from './shared/guards/academic-year.guard';
 import { CacheConfigService } from './config/cache.config';
@@ -39,6 +40,7 @@ import { AcademicYear } from './entities/academic-year.entity';
     StudentsModule,
     ClassesModule,
     CoursesModule,
+    NotesModule,
   ],
   controllers: [AppController],
   providers: [
