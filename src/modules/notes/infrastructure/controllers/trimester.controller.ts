@@ -21,6 +21,7 @@ import {
   ApiBearerAuth,
   ApiParam,
   ApiQuery,
+  ApiSecurity,
 } from '@nestjs/swagger';
 import { CreateTrimesterUseCase } from '../../application/use-cases/create-trimester.use-case';
 import { GetTrimestersByAcademicYearUseCase } from '../../application/use-cases/get-trimesters-by-academic-year.use-case';
@@ -53,6 +54,7 @@ export class TrimesterController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @ApiSecurity('AcademicYear')
   @ApiOperation({
     summary: 'Create a new trimester',
     description: 'Create a new trimester for the current academic year.',
@@ -87,6 +89,7 @@ export class TrimesterController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
+  @ApiSecurity('AcademicYear')
   @ApiOperation({
     summary: 'Get all trimesters for current academic year',
     description: 'Retrieve all trimesters for the current academic year.',
@@ -131,6 +134,7 @@ export class TrimesterController {
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
+  @ApiSecurity('AcademicYear')
   @ApiOperation({
     summary: 'Get a trimester by ID',
     description: 'Retrieve a specific trimester by its ID.',
@@ -166,6 +170,7 @@ export class TrimesterController {
 
   @Patch(':id')
   @HttpCode(HttpStatus.OK)
+  @ApiSecurity('AcademicYear')
   @ApiOperation({
     summary: 'Update a trimester',
     description: 'Update trimester details.',
@@ -192,6 +197,7 @@ export class TrimesterController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
+  @ApiSecurity('AcademicYear')
   @ApiOperation({
     summary: 'Delete a trimester',
     description: 'Delete a trimester by ID.',

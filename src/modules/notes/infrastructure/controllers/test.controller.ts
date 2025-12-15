@@ -17,6 +17,7 @@ import {
   ApiBody,
   ApiBearerAuth,
   ApiParam,
+  ApiSecurity,
 } from '@nestjs/swagger';
 import { CreateTestUseCase } from '../../application/use-cases/create-test.use-case';
 import { GetTestsByTrimesterUseCase } from '../../application/use-cases/get-tests-by-trimester.use-case';
@@ -48,6 +49,7 @@ export class TestController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @ApiSecurity('AcademicYear')
   @ApiOperation({
     summary: 'Create a new test',
     description: 'Create a new test for a trimester.',
@@ -78,6 +80,7 @@ export class TestController {
 
   @Get('trimester/:trimesterId')
   @HttpCode(HttpStatus.OK)
+  @ApiSecurity('AcademicYear')
   @ApiOperation({
     summary: 'Get tests by trimester',
     description: 'Retrieve all tests for a specific trimester.',
@@ -111,6 +114,7 @@ export class TestController {
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
+  @ApiSecurity('AcademicYear')
   @ApiOperation({
     summary: 'Get a test by ID',
     description: 'Retrieve a specific test by its ID.',
@@ -132,6 +136,7 @@ export class TestController {
 
   @Patch(':id')
   @HttpCode(HttpStatus.OK)
+  @ApiSecurity('AcademicYear')
   @ApiOperation({
     summary: 'Update a test',
     description: 'Update test details.',
@@ -157,6 +162,7 @@ export class TestController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
+  @ApiSecurity('AcademicYear')
   @ApiOperation({
     summary: 'Delete a test',
     description: 'Delete a test by ID.',
