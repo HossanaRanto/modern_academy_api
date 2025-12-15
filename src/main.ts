@@ -23,6 +23,10 @@ async function bootstrap() {
     .setTitle('Modern Academy API')
     .setDescription(`
       ## Multi-Tenant SaaS API for Educational Academy Management
+      
+      ### Academic Year Context
+      Many endpoints require the \`x-academic-year-id\` header to specify which academic year the operation applies to.
+      Click "Authorize" next to "AcademicYear" to set this header globally for all requests.
     `)
     .setVersion('1.0')
     .addTag('Authentication', 'User authentication endpoints (Public)')
@@ -38,6 +42,15 @@ async function bootstrap() {
         in: 'header',
       },
       'JWT-auth',
+    )
+    .addApiKey(
+      {
+        type: 'apiKey',
+        name: 'x-academic-year-id',
+        in: 'header',
+        description: 'Academic Year ID (UUID) - Required for academic year-specific operations',
+      },
+      'AcademicYear',
     )
     .build();
 

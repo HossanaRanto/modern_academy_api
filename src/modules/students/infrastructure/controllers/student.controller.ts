@@ -17,7 +17,7 @@ import {
   ApiBody, 
   ApiBearerAuth, 
   ApiParam,
-  ApiHeader,
+  ApiSecurity,
 } from '@nestjs/swagger';
 import { RegisterStudentUseCase } from '../../application/use-cases/register-student.use-case';
 import { GetStudentsByAcademicYearUseCase } from '../../application/use-cases/get-students-by-academic-year.use-case';
@@ -56,12 +56,7 @@ export class StudentController {
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   @RequireAcademicYear()
-  @ApiHeader({
-    name: 'x-academic-year-id',
-    description: 'Current academic year ID',
-    required: true,
-    schema: { type: 'string', format: 'uuid' },
-  })
+  @ApiSecurity('AcademicYear')
   @ApiOperation({ 
     summary: 'Register a student',
     description: 'Register a student for the current academic year. Creates new student if registration number does not exist, otherwise updates existing student and creates new inscription.',
@@ -107,12 +102,7 @@ export class StudentController {
   @CacheKey('students:academic-year:current')
   @CacheTTL(300)
   @RequireAcademicYear()
-  @ApiHeader({
-    name: 'x-academic-year-id',
-    description: 'Current academic year ID',
-    required: true,
-    schema: { type: 'string', format: 'uuid' },
-  })
+  @ApiSecurity('AcademicYear')
   @ApiOperation({ 
     summary: 'Get students by current academic year',
     description: 'Retrieve all students registered for the current academic year.',
@@ -172,12 +162,7 @@ export class StudentController {
   @CacheKey('students:inscriptions:academic-year:current')
   @CacheTTL(300)
   @RequireAcademicYear()
-  @ApiHeader({
-    name: 'x-academic-year-id',
-    description: 'Current academic year ID',
-    required: true,
-    schema: { type: 'string', format: 'uuid' },
-  })
+  @ApiSecurity('AcademicYear')
   @ApiOperation({ 
     summary: 'Get inscriptions by current academic year',
     description: 'Retrieve all student inscriptions for the current academic year.',

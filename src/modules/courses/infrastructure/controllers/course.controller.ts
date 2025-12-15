@@ -22,7 +22,7 @@ import {
   ApiBearerAuth, 
   ApiParam,
   ApiQuery,
-  ApiHeader,
+  ApiSecurity,
 } from '@nestjs/swagger';
 import { CreateCourseUseCase } from '../../application/use-cases/create-course.use-case';
 import { GetCoursesUseCase } from '../../application/use-cases/get-courses.use-case';
@@ -292,12 +292,7 @@ export class CourseController {
   @Post('seed/defaults')
   @HttpCode(HttpStatus.CREATED)
   @RequireAcademicYear()
-  @ApiHeader({
-    name: 'x-academic-year-id',
-    description: 'Current academic year ID',
-    required: true,
-    schema: { type: 'string', format: 'uuid' },
-  })
+  @ApiSecurity('AcademicYear')
   @ApiOperation({ 
     summary: 'Seed default courses',
     description: 'Loads and creates default courses from JSON configuration, mapped to class names. Creates course classes for the current academic year. Requires that classes and class years exist.',
