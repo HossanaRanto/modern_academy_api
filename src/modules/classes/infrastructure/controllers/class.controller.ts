@@ -22,6 +22,7 @@ import {
   ApiBearerAuth, 
   ApiParam,
   ApiQuery,
+  ApiHeader,
 } from '@nestjs/swagger';
 import { CreateClassUseCase } from '../../application/use-cases/create-class.use-case';
 import { GetClassesUseCase } from '../../application/use-cases/get-classes.use-case';
@@ -210,6 +211,12 @@ export class ClassController {
   @Post('years')
   @HttpCode(HttpStatus.CREATED)
   @RequireAcademicYear()
+  @ApiHeader({
+    name: 'x-academic-year-id',
+    description: 'Current academic year ID',
+    required: true,
+    schema: { type: 'string', format: 'uuid' },
+  })
   @ApiOperation({ 
     summary: 'Create a class year',
     description: 'Create a class year for the current academic year. This associates a class with the current academic year.',
@@ -247,6 +254,12 @@ export class ClassController {
   @CacheKey('classes:years:current')
   @CacheTTL(300) // Cache for 5 minutes
   @RequireAcademicYear()
+  @ApiHeader({
+    name: 'x-academic-year-id',
+    description: 'Current academic year ID',
+    required: true,
+    schema: { type: 'string', format: 'uuid' },
+  })
   @ApiOperation({ 
     summary: 'Get class years for current academic year',
     description: 'Retrieve all class years for the current academic year.',
@@ -264,6 +277,12 @@ export class ClassController {
 
   @Patch('years/:id')
   @RequireAcademicYear()
+  @ApiHeader({
+    name: 'x-academic-year-id',
+    description: 'Current academic year ID',
+    required: true,
+    schema: { type: 'string', format: 'uuid' },
+  })
   @ApiOperation({ 
     summary: 'Update class year',
     description: 'Update an existing class year.',
@@ -286,6 +305,12 @@ export class ClassController {
   @Post('seed/defaults')
   @HttpCode(HttpStatus.CREATED)
   @RequireAcademicYear()
+  @ApiHeader({
+    name: 'x-academic-year-id',
+    description: 'Current academic year ID',
+    required: true,
+    schema: { type: 'string', format: 'uuid' },
+  })
   @ApiOperation({ 
     summary: 'Seed default classes',
     description: 'Loads and creates default classes from JSON configuration and creates class years for the current academic year. Skips classes that already exist.',
@@ -316,6 +341,8 @@ export class ClassController {
   async seedDefaultClasses(
     @CurrentAcademicYear() academicYearId: string,
   ) {
+    console.log("academic",academicYearId);
+    
     return this.seedDefaultClassesUseCase.execute(academicYearId);
   }
 }
