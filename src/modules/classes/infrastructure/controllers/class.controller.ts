@@ -285,9 +285,10 @@ export class ClassController {
 
   @Post('seed/defaults')
   @HttpCode(HttpStatus.CREATED)
+  @RequireAcademicYear()
   @ApiOperation({ 
     summary: 'Seed default classes',
-    description: 'Loads and creates default classes from JSON configuration. Skips classes that already exist.',
+    description: 'Loads and creates default classes from JSON configuration and creates class years for the current academic year. Skips classes that already exist.',
   })
   @ApiResponse({
     status: 201,
@@ -312,7 +313,10 @@ export class ClassController {
     },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async seedDefaultClasses(@TenantId() academyId: string) {
-    return this.seedDefaultClassesUseCase.execute(academyId);
+  async seedDefaultClasses(
+    @TenantId() academyId: string,
+    @CurrentAcademicYear() academicYearId: string,
+  ) {
+    return this.seedDefaultClassesUseCase.execute(academyId, academicYearId);
   }
 }

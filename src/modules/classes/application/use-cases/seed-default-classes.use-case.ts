@@ -1,5 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import * as ClassPort from '../ports/class-repository.port';
+import * as ClassYearPort from '../ports/class-year-repository.port';
 import { ClassResponse } from '../../domain/class.interface';
 
 interface DefaultClassData {
@@ -18,9 +19,11 @@ export class SeedDefaultClassesUseCase {
   constructor(
     @Inject(ClassPort.CLASS_REPOSITORY)
     private readonly classRepository: ClassPort.IClassRepository,
+    @Inject(ClassYearPort.CLASS_YEAR_REPOSITORY)
+    private readonly classYearRepository: ClassYearPort.IClassYearRepository,
   ) {}
 
-  async execute(academyId: string): Promise<{ created: ClassResponse[]; skipped: string[] }> {
+  async execute(academyId: string, academicYearId: string): Promise<{ created: ClassResponse[]; skipped: string[] }> {
     let defaultClasses: DefaultClassData[];
     try {
       // Use require which works with both src and dist folders
@@ -42,6 +45,23 @@ export class SeedDefaultClassesUseCase {
         this.logger.log(`Skipping class ${classData.code} - already exists`);
         skipped.push(classData.code);
         classMap.set(classData.code, existingClass);
+        
+        // Create class year if it doesn't exist for this academic year
+        const existingClassYear = await this.classYearRepository.findByClassAndAcademicYear(
+          existingClass.id,
+          academicYearId,
+        );
+        
+        if (!existingClassYear) {
+          await this.classYearRepository.create({
+            classId: existingClass.id,
+            academicYearId: academicYearId,
+            maxStudents: existingClass.capacity || 30,
+            isActive: true,
+          });
+          this.logger.log(`Created class year for existing class: ${classData.code}`);
+        }
+        
         continue;
       }
 
@@ -57,6 +77,14 @@ export class SeedDefaultClassesUseCase {
 
       classMap.set(classData.code, classEntity);
 
+      // Create class year for the new class
+      await this.classYearRepository.create({
+        classId: classEntity.id,
+        academicYearId: academicYearId,
+        maxStudents: classData.capacity || 30,
+        isActive: true,
+      });
+
       created.push({
         id: classEntity.id,
         name: classEntity.name,
@@ -70,7 +98,7 @@ export class SeedDefaultClassesUseCase {
         updatedAt: classEntity.updatedAt,
       });
 
-      this.logger.log(`Created class: ${classData.name} (${classData.code})`);
+      this.logger.log(`Created class: ${classData.name} (${classData.code}) with class year`);
     }
 
     // Second pass: Update child class relationships
