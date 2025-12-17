@@ -50,6 +50,12 @@ export interface StudentResponse {
   parentPhone?: string;
   parentEmail?: string;
   isActive: boolean;
+  currentClass?: {
+    id: string;
+    code: string;
+    name: string;
+    level: number;
+  };
   createdAt: Date;
   updatedAt: Date;
 }
