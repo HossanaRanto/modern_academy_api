@@ -40,6 +40,6 @@ import { USER_REPOSITORY } from '../auth/application/ports/user-repository.port'
       useClass: UserRepositoryAdapter,
     },
   ],
-  exports: [],
+  exports: [ACADEMIC_YEAR_REPOSITORY],
 })
 export class AcademyModule {}
