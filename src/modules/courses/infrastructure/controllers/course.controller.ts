@@ -31,6 +31,7 @@ import { UpdateCourseUseCase } from '../../application/use-cases/update-course.u
 import { DeleteCourseUseCase } from '../../application/use-cases/delete-course.use-case';
 import { CreateCourseClassUseCase } from '../../application/use-cases/create-course-class.use-case';
 import { GetCourseClassesByClassYearUseCase } from '../../application/use-cases/get-course-classes-by-class-year.use-case';
+import { GetCoursesByClassCodeUseCase } from '../../application/use-cases/get-courses-by-class-code.use-case';
 import { UpdateCourseClassUseCase } from '../../application/use-cases/update-course-class.use-case';
 import { SeedDefaultCoursesUseCase } from '../../application/use-cases/seed-default-courses.use-case';
 import { CreateCourseDto } from '../dtos/create-course.dto';
@@ -60,6 +61,7 @@ export class CourseController {
     private readonly deleteCourseUseCase: DeleteCourseUseCase,
     private readonly createCourseClassUseCase: CreateCourseClassUseCase,
     private readonly getCourseClassesByClassYearUseCase: GetCourseClassesByClassYearUseCase,
+    private readonly getCoursesByClassCodeUseCase: GetCoursesByClassCodeUseCase,
     private readonly updateCourseClassUseCase: UpdateCourseClassUseCase,
     private readonly seedDefaultCoursesUseCase: SeedDefaultCoursesUseCase,
   ) {}
@@ -267,6 +269,54 @@ export class CourseController {
     @Param('classYearId') classYearId: string,
   ) {
     return this.getCourseClassesByClassYearUseCase.execute(classYearId);
+  }
+
+  @Get('by-class/:classCode')
+  @UseInterceptors(CacheInterceptor)
+  @CacheKey('courses:by-class::classCode')
+  @CacheTTL(300) // Cache for 5 minutes
+  @ApiOperation({ 
+    summary: 'Get courses by class code for current academic year',
+    description: 'Retrieve all courses assigned to a specific class for the current academic year. Uses class code as the identifier.',
+  })
+  @ApiParam({ name: 'classCode', description: 'Class code (e.g., "G1", "6A", "1B")' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of courses for the class in the current academic year',
+    schema: {
+      example: [
+        {
+          id: '660e8400-e29b-41d4-a716-446655440003',
+          courseId: '660e8400-e29b-41d4-a716-446655440000',
+          classYearId: '660e8400-e29b-41d4-a716-446655440001',
+          teacherId: '660e8400-e29b-41d4-a716-446655440002',
+          hoursPerWeek: 4,
+          coefficient: 2,
+          isActive: true,
+          course: {
+            id: '660e8400-e29b-41d4-a716-446655440000',
+            name: 'Mathematics',
+            code: 'MATH101',
+            description: 'Introduction to Mathematics',
+            coefficient: 2,
+            category: 'Sciences',
+            isActive: true,
+            createdAt: '2025-12-15T10:00:00.000Z',
+            updatedAt: '2025-12-15T10:00:00.000Z',
+          },
+          createdAt: '2025-12-15T10:00:00.000Z',
+          updatedAt: '2025-12-15T10:00:00.000Z',
+        },
+      ],
+    },
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Class not found, academic year not set, or class has no courses for current year' })
+  async getCoursesByClassCode(
+    @Param('classCode') classCode: string,
+    @TenantId() academyId: string,
+  ) {
+    return this.getCoursesByClassCodeUseCase.execute(classCode, academyId);
   }
 
   @Patch('classes/:id')
