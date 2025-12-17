@@ -80,6 +80,8 @@ export class StudentRepositoryAdapter implements IStudentRepository {
     const students = await this.studentRepository
       .createQueryBuilder('student')
       .innerJoin('student.inscriptions', 'inscription')
+      .leftJoinAndSelect('inscription.classYear', 'classYear')
+      .leftJoinAndSelect('classYear.class', 'class')
       .where('inscription.academicYearId = :academicYearId', { academicYearId })
       .orderBy('student.lastName', 'ASC')
       .addOrderBy('student.firstName', 'ASC')
