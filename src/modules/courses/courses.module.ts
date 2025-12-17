@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Course } from '../../entities/course.entity';
 import { CourseClass } from '../../entities/course-class.entity';
 import { ClassesModule } from '../classes/classes.module';
+import { AcademyModule } from '../academy/academy.module';
 import { CourseController } from './infrastructure/controllers/course.controller';
 import { CreateCourseUseCase } from './application/use-cases/create-course.use-case';
 import { GetCoursesUseCase } from './application/use-cases/get-courses.use-case';
@@ -11,6 +12,7 @@ import { UpdateCourseUseCase } from './application/use-cases/update-course.use-c
 import { DeleteCourseUseCase } from './application/use-cases/delete-course.use-case';
 import { CreateCourseClassUseCase } from './application/use-cases/create-course-class.use-case';
 import { GetCourseClassesByClassYearUseCase } from './application/use-cases/get-course-classes-by-class-year.use-case';
+import { GetCoursesByClassCodeUseCase } from './application/use-cases/get-courses-by-class-code.use-case';
 import { UpdateCourseClassUseCase } from './application/use-cases/update-course-class.use-case';
 import { SeedDefaultCoursesUseCase } from './application/use-cases/seed-default-courses.use-case';
 import { CourseRepositoryAdapter } from './infrastructure/adapters/course-repository.adapter';
@@ -22,6 +24,7 @@ import { COURSE_CLASS_REPOSITORY } from './application/ports/course-class-reposi
   imports: [
     TypeOrmModule.forFeature([Course, CourseClass]),
     ClassesModule,
+    AcademyModule,
   ],
   controllers: [CourseController],
   providers: [
@@ -32,6 +35,7 @@ import { COURSE_CLASS_REPOSITORY } from './application/ports/course-class-reposi
     DeleteCourseUseCase,
     CreateCourseClassUseCase,
     GetCourseClassesByClassYearUseCase,
+    GetCoursesByClassCodeUseCase,
     UpdateCourseClassUseCase,
     SeedDefaultCoursesUseCase,
     {
