@@ -135,20 +135,20 @@ export class NoteController {
     return this.getNotesByTestUseCase.execute(testId, courseId);
   }
 
-  @Post('bulk/test/:testId/course/:courseId')
+  @Post('bulk/test/:testCode/course/:courseCode')
   @HttpCode(HttpStatus.OK)
   @ApiSecurity('AcademicYear')
   @ApiOperation({
     summary: 'Bulk update notes for a test and course',
-    description: 'Update all student notes for a specific test and course in a class. Creates or updates notes.',
+    description: 'Update all student notes for a specific test and course in a class. Creates or updates notes. Test code format: TrimX-Y (e.g., Trim1-1 for first trimester first test). Course code can be any code like MATH101.',
   })
   @ApiParam({
-    name: 'testId',
-    description: 'Test UUID',
+    name: 'testCode',
+    description: 'Test code in format TrimX-Y (e.g., Trim1-1)',
   })
   @ApiParam({
-    name: 'courseId',
-    description: 'Course UUID',
+    name: 'courseCode',
+    description: 'Course code (e.g., MATH101)',
   })
   @ApiBody({ type: BulkUpdateNotesDto })
   @ApiResponse({
@@ -164,15 +164,15 @@ export class NoteController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Student not enrolled in course' })
   async bulkUpdateNotesByTestAndCourse(
-    @Param('testId') testId: string,
-    @Param('courseId') courseId: string,
+    @Param('testCode') testCode: string,
+    @Param('courseCode') courseCode: string,
     @Body() request: BulkUpdateNotesDto,
     @CurrentAcademicYear() academicYearId: string,
     @CurrentUser() user: any,
   ) {
     return this.bulkUpdateNotesByTestAndCourseUseCase.execute(
-      testId,
-      courseId,
+      testCode,
+      courseCode,
       request,
       academicYearId,
       user.id,

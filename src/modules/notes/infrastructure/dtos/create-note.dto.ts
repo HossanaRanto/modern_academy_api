@@ -12,28 +12,28 @@ import {
 
 export class CreateNoteDto {
   @ApiProperty({
-    description: 'Student ID',
-    example: '440e8400-e29b-41d4-a716-446655440000',
+    description: 'Student Registration Number',
+    example: 'STU001',
   })
-  @IsUUID()
+  @IsString()
   @IsNotEmpty()
-  studentId: string;
+  registrationNumber: string;
 
   @ApiProperty({
-    description: 'Test ID',
-    example: '880e8400-e29b-41d4-a716-446655440000',
+    description: 'Test Code (format: TrimX-Y, e.g., Trim1-1 for first trimester first test)',
+    example: 'Trim1-1',
   })
-  @IsUUID()
+  @IsString()
   @IsNotEmpty()
-  testId: string;
+  testCode: string;
 
   @ApiProperty({
-    description: 'Course ID',
-    example: '330e8400-e29b-41d4-a716-446655440000',
+    description: 'Course Code',
+    example: 'MATH101',
   })
-  @IsUUID()
+  @IsString()
   @IsNotEmpty()
-  courseId: string;
+  courseCode: string;
 
   @ApiProperty({
     description: 'Score obtained by the student',

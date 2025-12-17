@@ -26,6 +26,28 @@ export class TestRepositoryAdapter implements ITestRepository {
     });
   }
 
+  async findByTrimesterOrderAndTestIndex(
+    trimesterOrder: number,
+    testIndex: number,
+    academicYearId: string,
+  ): Promise<Test | null> {
+    const query = this.testRepository
+      .createQueryBuilder('test')
+      .innerJoinAndSelect('test.trimester', 'trimester')
+      .where('trimester.academicYearId = :academicYearId', { academicYearId })
+      .andWhere('trimester.order = :trimesterOrder', { trimesterOrder })
+      .orderBy('test.date', 'ASC');
+
+    const tests = await query.getMany();
+
+    // Get the test at the specified index (1-indexed)
+    if (testIndex > 0 && testIndex <= tests.length) {
+      return tests[testIndex - 1];
+    }
+
+    return null;
+  }
+
   async create(testData: Partial<Test>): Promise<Test> {
     const test = this.testRepository.create(testData);
     return this.testRepository.save(test);

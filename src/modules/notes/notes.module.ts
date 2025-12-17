@@ -6,6 +6,8 @@ import { Note } from '../../entities/note.entity';
 import { AcademicYear } from '../../entities/academic-year.entity';
 import { StudentInscription } from '../../entities/student-inscription.entity';
 import { CourseClass } from '../../entities/course-class.entity';
+import { Course } from '../../entities/course.entity';
+import { Student } from '../../entities/student.entity';
 import { TrimesterController } from './infrastructure/controllers/trimester.controller';
 import { TestController } from './infrastructure/controllers/test.controller';
 import { NoteController } from './infrastructure/controllers/note.controller';
@@ -30,10 +32,14 @@ import { TrimesterRepositoryAdapter } from './infrastructure/adapters/trimester-
 import { TestRepositoryAdapter } from './infrastructure/adapters/test-repository.adapter';
 import { NoteRepositoryAdapter } from './infrastructure/adapters/note-repository.adapter';
 import { StudentInscriptionRepositoryAdapter } from './infrastructure/adapters/student-inscription-repository.adapter';
+import { CourseRepositoryAdapter } from '../courses/infrastructure/adapters/course-repository.adapter';
+import { StudentRepositoryAdapter } from '../students/infrastructure/adapters/student-repository.adapter';
 import { TRIMESTER_REPOSITORY } from './application/ports/trimester-repository.port';
 import { TEST_REPOSITORY } from './application/ports/test-repository.port';
 import { NOTE_REPOSITORY } from './application/ports/note-repository.port';
 import { STUDENT_INSCRIPTION_REPOSITORY } from './application/ports/student-inscription-repository.port';
+import { COURSE_REPOSITORY } from './application/ports/course-repository.port';
+import { STUDENT_REPOSITORY } from './application/ports/student-repository.port';
 
 @Module({
   imports: [
@@ -44,6 +50,8 @@ import { STUDENT_INSCRIPTION_REPOSITORY } from './application/ports/student-insc
       AcademicYear,
       StudentInscription,
       CourseClass,
+      Course,
+      Student,
     ]),
   ],
   controllers: [TrimesterController, TestController, NoteController],
@@ -85,12 +93,22 @@ import { STUDENT_INSCRIPTION_REPOSITORY } from './application/ports/student-insc
       provide: STUDENT_INSCRIPTION_REPOSITORY,
       useClass: StudentInscriptionRepositoryAdapter,
     },
+    {
+      provide: COURSE_REPOSITORY,
+      useClass: CourseRepositoryAdapter,
+    },
+    {
+      provide: STUDENT_REPOSITORY,
+      useClass: StudentRepositoryAdapter,
+    },
   ],
   exports: [
     TRIMESTER_REPOSITORY,
     TEST_REPOSITORY,
     NOTE_REPOSITORY,
     STUDENT_INSCRIPTION_REPOSITORY,
+    COURSE_REPOSITORY,
+    STUDENT_REPOSITORY,
   ],
 })
 export class NotesModule {}

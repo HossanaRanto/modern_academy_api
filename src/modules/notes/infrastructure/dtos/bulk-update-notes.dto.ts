@@ -14,12 +14,12 @@ import {
 
 export class StudentNoteDto {
   @ApiProperty({
-    description: 'Student ID',
-    example: '440e8400-e29b-41d4-a716-446655440000',
+    description: 'Student Registration Number',
+    example: 'STU001',
   })
-  @IsUUID()
+  @IsString()
   @IsNotEmpty()
-  studentId: string;
+  registrationNumber: string;
 
   @ApiProperty({
     description: 'Score obtained by the student',
