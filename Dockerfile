@@ -52,8 +52,9 @@ COPY src/shared/pdf/templates ./dist/src/shared/pdf/templates
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nestjs -u 1001
 
-# Change ownership of the application files
-RUN chown -R nestjs:nodejs /app
+# Change ownership of only the necessary application files (not node_modules)
+RUN chown nestjs:nodejs /app && \
+    chown -R nestjs:nodejs /app/dist
 
 # Switch to non-root user
 USER nestjs
