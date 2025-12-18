@@ -18,6 +18,7 @@ import { AcademicYear } from './entities/academic-year.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
+      url: process.env.DB_URL || undefined,
       type: (process.env.DB_TYPE as 'postgres' | 'mysql') || 'postgres',
       host: process.env.DB_HOST || 'localhost',
       port: parseInt(process.env.DB_PORT || '5432'),

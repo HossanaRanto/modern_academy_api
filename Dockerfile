@@ -21,15 +21,7 @@ FROM node:20-alpine AS production
 WORKDIR /app
 
 # Install Chromium and dependencies for Puppeteer
-RUN apk add --no-cache \
-    chromium \
-    nss \
-    freetype \
-    harfbuzz \
-    ca-certificates \
-    ttf-freefont \
-    nodejs \
-    yarn
+RUN apk add --no-cache chromium ca-certificates
 
 # Set Puppeteer to use system Chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
@@ -56,11 +48,14 @@ RUN addgroup -g 1001 -S nodejs && \
 RUN chown nestjs:nodejs /app && \
     chown -R nestjs:nodejs /app/dist
 
+# Create entrypoint script for migrations
+RUN echo '#!/bin/sh\nset -e\nnpm run migration:run || true\nnode dist/main' > /app/docker-entrypoint.sh && chmod +x /app/docker-entrypoint.sh && chown nestjs:nodejs /app/docker-entrypoint.sh
+
 # Switch to non-root user
 USER nestjs
 
 # Expose port
 EXPOSE 3000
 
-# Start the application
-CMD ["node", "dist/main"]
+# Start application with migrations
+CMD ["/app/docker-entrypoint.sh"]

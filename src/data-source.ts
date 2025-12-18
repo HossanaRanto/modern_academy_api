@@ -10,6 +10,7 @@ const dbPort = parseInt(process.env.DB_PORT || '5432');
 
 const dataSourceConfig: DataSourceOptions = {
   type: dbType,
+  url: process.env.DB_URL || undefined,
   host: process.env.DB_HOST || 'localhost',
   port: dbPort,
   username: process.env.DB_USERNAME || (dbType === 'postgres' ? 'postgres' : 'root'),
