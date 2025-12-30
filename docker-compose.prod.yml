@@ -25,16 +25,16 @@ services:
           cpus: '0.25'
           memory: 128M
 
-  # NestJS API - Production
-  modern_academy_api:
+  # NestJS API - Blue Instance
+  modern_academy_api_blue:
     build:
       context: .
       dockerfile: Dockerfile
       target: production
-    container_name: modern_academy_api
+    container_name: modern_academy_api_blue
     restart: always
     ports:
-      - '${PORT:-3000}:3000'
+      - '${PORT_BLUE:-3001}:3000'
     environment:
       NODE_ENV: production
       DB_HOST: ${DB_HOST}
@@ -66,6 +66,82 @@ services:
         reservations:
           cpus: '0.5'
           memory: 256M
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.api_blue.loadbalancer.server.port=3000"
+
+  # NestJS API - Green Instance
+  modern_academy_api_green:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: modern_academy_api_green
+    restart: always
+    ports:
+      - '${PORT_GREEN:-3002}:3000'
+    environment:
+      NODE_ENV: production
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_TYPE: ${DB_TYPE}
+      REDIS_HOST: modern_academy_redis
+      REDIS_PORT: 6379
+      REDIS_TTL: ${REDIS_TTL:-300}
+      PORT: 3000
+    depends_on:
+      modern_academy_redis:
+        condition: service_healthy
+    networks:
+      - modern_academy_network
+    healthcheck:
+      test: ['CMD', 'wget', '--quiet', '--tries=1', '--spider', 'http://localhost:3000/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.api_green.loadbalancer.server.port=3000"
+
+  # Nginx Load Balancer for Blue-Green Deployment
+  modern_academy_lb:
+    image: nginx:alpine
+    container_name: modern_academy_lb
+    restart: always
+    ports:
+      - '${PORT:-3000}:80'
+    volumes:
+      - ./nginx/conf.d/blue-green.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - modern_academy_api_blue
+      - modern_academy_api_green
+    networks:
+      - modern_academy_network
+    healthcheck:
+      test: ['CMD', 'wget', '--quiet', '--tries=1', '--spider', 'http://localhost/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
 
 networks:
   modern_academy_network:
